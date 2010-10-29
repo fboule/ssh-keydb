@@ -28,7 +28,10 @@ class Location(Entity):
     permissions = OneToMany('Permission')
 
     def __repr__(self):
-        return "<Location '%s'>" % self.location
+        return "<location>%s</location>" % self.location
+
+    def __str__(self):
+        return self.location
 
 class User(Entity):
     user = Field(Text, primary_key = True)
@@ -38,12 +41,17 @@ class User(Entity):
     memberships = OneToMany('Membership')
 
     def __repr__(self):
-        s = "<User '%s'" % self.user
+        section = ''
+        location = ''
         if self.section is not None:
-            s = s + " '%s'" % self.section
+            section = " section='%s'" % self.section
         if self.location is not None:
-            s = s + " %s" % repr(self.location)
-        return s + '>'
+            location = " location='%s'" % str(self.location)
+        s = "<user%s%s>%s</user>" % (section, location, self.user)
+        return s
+
+    def __str__(self):
+        return self.user
 
 class Key(Entity):
     key_name = Field(Text, primary_key = True)
@@ -53,14 +61,26 @@ class Key(Entity):
     memberships = OneToMany('Membership')
 
     def __repr__(self):
-        return "<Key '%s'>" % self.key_name
+        s = "<key>"
+        s += '<name>%s</name>' % self.key_name
+        if self.key_type is not None: 
+            s += repr(self.key_type)
+        if self.key_value is not None: 
+            s += '<public>%s</public>' % self.key_value
+        return s + "</key>"
+
+    def __str__(self):
+        return self.key_name
 
 class KeyType(Entity):
     key_type = Field(Text, primary_key = True)
     keys = OneToMany('Key')
 
     def __repr__(self):
-        return "<Type '%s'>" % self.key_type
+        return "<type>%s</type>" % self.key_type
+
+    def __str__(self):
+        return self.key_type
 
 class Server(Entity):
     server = Field(Text, primary_key = True)
@@ -71,9 +91,15 @@ class Server(Entity):
 
     def __repr__(self):
         if len(self.hostkeys) > 0:
-            return "<Server '%s' %s>" % (self.server, ' '.join([ repr(h) for h in self.hostkeys]))
+            s = "<server name='%s'>" % self.server
+            s += ''.join([ repr(key) for key in self.hostkeys ])
+            s += "</server>"
         else:
-            return "<Server '%s'>" % self.server
+            s = "<server name='%s' />" % self.server
+        return s
+
+    def __str__(self):
+        return self.server
 
 class ServerHostKey(Entity):
     filename = Field(Text, primary_key = True)
@@ -82,10 +108,15 @@ class ServerHostKey(Entity):
     public_key = Field(Text)
 
     def __repr__(self):
-        s = "<ServerKey %s" % self.filename
-        if self.private_key is not None: s += ', privkey'
-        if self.public_key is not None: s += ', pubkey'
-        return s + ">"
+        s = "<key name='%s'>" % self.filename
+        if self.private_key is not None: 
+            s += '<private>%s</private>' % self.private_key
+        if self.public_key is not None: 
+            s += '<public>%s</public>' % self.public_key
+        return s + "</key>"
+
+    def __str__(self):
+        return self.filename
 
 class ServerGroup(Entity):
     server_group = Field(Text, primary_key = True)
@@ -93,7 +124,14 @@ class ServerGroup(Entity):
     memberships = OneToMany('Membership')
 
     def __repr__(self):
-        return "<Group '%s' %s>" % (self.server_group, repr(self.servers))
+        if len(self.servers) > 0:
+            s = "<servergroup name='%s'>" % self.server_group
+            s += ''.join([ repr(server) for server in self.servers ])
+            s += "</servergroup>"
+        return s
+
+    def __str__(self):
+        return self.server_group
 
 class Role(Entity):
     role = Field(Text, primary_key = True)
@@ -101,7 +139,10 @@ class Role(Entity):
     permissions = OneToMany('Permission')
 
     def __repr__(self):
-        return "<Role '%s'>" % self.role
+        return "<role>%s</role>" % self.role
+
+    def __str__(self):
+        return self.role
 
 class Membership(Entity):
     user = ManyToOne('User', column_kwargs={'primary_key': True})
@@ -111,7 +152,11 @@ class Membership(Entity):
     args = Field(Text)
 
     def __repr__(self):
-        return "<Membership %s %s %s %s args='%s'>" % (repr(self.user), repr(self.key), repr(self.server_group), repr(self.role), self.args)
+        s = "<membership>"
+        s += repr(self.user) + repr(self.key) + repr(self.server_group) + repr(self.role)
+        s += '<args>%s</args>' % self.args
+        s += "</membership>"
+        return s
 
 class Permission(Entity):
     role = ManyToOne('Role', column_kwargs={'primary_key': True})
@@ -121,6 +166,11 @@ class Permission(Entity):
     command = Field(Text)
 
     def __repr__(self):
-        return "<Permission %s %s login='%s' %s command='%s'>" % (repr(self.role), repr(self.server), self.login, repr(self.location), self.command)
+        s = "<permission>"
+        s += repr(self.role) + repr(self.server) + repr(self.location)
+        s += '<login>%s</login>' % self.login
+        s += '<command>%s</command>' % self.command
+        s += "</permission>"
+        return s
 
 setup_all(True)
