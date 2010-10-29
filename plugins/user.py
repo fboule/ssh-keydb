@@ -84,6 +84,12 @@ class UserController(Controller):
                 sectionname = opts['section']
             userlist = userlist.filter_by(section = sectionname)
 
+        if 'location' in opts: 
+            loc = None
+            if opts['location'] != '':
+                loc = Location.get_by(location = opts['location'])
+            userlist = userlist.filter_by(location = loc)
+
         return userlist
 
     def set(self, *kargs, **kwargs):
@@ -153,19 +159,19 @@ class UserController(Controller):
 
     list.usage = {        
         'shortdesc': 'Manage users',        
-        'usage': [ '%(exec)s user list [--user=<user>] [--key=<key>] [--section=<section>] [--long]' ],
+        'usage': [ '%(exec)s user list [--user=<user>] [--section=<section>] [--location=<location>] [--long]' ],
         'options': {             
             'help': 'displays the current help',        
             'user=': 'filter by user',
-            'key=': 'filter by key',
             'section=': 'filter by section',
+            'location=': 'filter by location',
             'long': 'long display',
         },        
         'shortopts': { 'help': 'h', 'long': 'l' }    
     }    
 
     set.usage = {        
-        'shortdesc': 'Manage keys',        
+        'shortdesc': 'Manage users',        
         'usage': [ '%(exec)s user set <user> <location> [<section>] [--keyfile=<keyfile>] [--keystring=<string>]' ],
         'options': {             
             'help': 'displays the current help',        
@@ -176,7 +182,7 @@ class UserController(Controller):
     }    
 
     remove.usage = {        
-        'shortdesc': 'Manage keys',        
+        'shortdesc': 'Manage users',        
         'usage': [ '%(exec)s user remove [--user=<user>] [--section=<section>] [--key=<key>]' ],
         'options': {             
             'help': 'displays the current help',        
