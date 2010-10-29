@@ -1,0 +1,47 @@
+body
+{
+    margin: 0;
+}
+
+div
+{
+    font-family: sans-serif;
+    font-size: 10pt;
+    margin-bottom: 2ex;
+}
+
+div p.title
+{
+    margin: 0;
+    padding: 1ex;
+    background: #ccccdd;
+    color: darkblue;
+    font-weight: bold;
+}
+
+div#header
+{
+}
+
+div#header p.title
+{
+    font-size: 14pt;
+    color: lightblue;
+    background-color: darkblue;
+    font-weight: normal;
+}
+
+div#filter
+{
+}
+
+div#filter span.set
+{
+    color: red;
+    font-weight: bold;
+}
+
+table
+{
+    font-size: 10pt;
+}

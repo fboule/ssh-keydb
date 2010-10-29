@@ -1,0 +1,37 @@
+table
+{
+    border-collapse: collapse;
+    margin: 1ex;
+    border: 1pt solid;
+}
+
+table tr
+{
+    vertical-align: top;
+}
+
+table tr th
+{
+    text-align: left;
+    background-color: #ddddee;
+    padding: 1ex;
+    border: 1pt dotted;
+}
+
+table tr td
+{
+    padding-right: 1ex;
+    padding-left: 1ex;
+    margin: 0;
+    border-right: 1pt dotted;
+}
+
+table tr.line1 td
+{
+    background-color: #ddddff;
+}
+
+a 
+{
+    text-decoration: none;
+}

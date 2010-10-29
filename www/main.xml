@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="main.xsl" ?>
+
+<page>
+    <menu>
+        <item name='users'>Users management</item> 
+        <item name='servers'>Global settings</item>
+        <item name='hostkey'>Host keys</item>
+        <item name='apply'>Apply changes</item>
+    </menu>
+</page>

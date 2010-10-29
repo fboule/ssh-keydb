@@ -1,0 +1,51 @@
+div#header
+{
+}
+
+div#header p.title
+{
+    font-size: 14pt;
+    color: lightblue;
+    background-color: darkblue;
+    font-weight: normal;
+}
+
+div#errors p
+{
+    color: red;
+    font-weight: bold;
+}
+
+table
+{
+    border-collapse: collapse;
+    margin: 1ex;
+    border: 1pt solid;
+}
+
+table tr
+{
+    vertical-align: top;
+}
+
+table tr th
+{
+    text-align: left;
+    background-color: #ddddee;
+    padding: 1ex;
+    border: 1pt dotted;
+}
+
+table tr td
+{
+    padding-right: 1ex;
+    padding-left: 1ex;
+    border: 1pt dotted;
+    margin: 0;
+}
+
+tr#error td span
+{
+    color: red;
+    font-weight: bold;
+}
