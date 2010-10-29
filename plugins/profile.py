@@ -71,23 +71,29 @@ class ProfileController(Controller):
             res['users'][user]['keys'] = self.buildkeys(*kargs, **kwargs)
             res['users'][user]['memberships'] = self.buildmemb(*kargs, **kwargs)
             res['users'][user]['groups'] = self.buildgroups(*kargs, **kwargs)
+            res['users'][user]['groupnames'] = self.buildgroupnames(*kargs, **kwargs)
             res['users'][user]['permissions'] = self.buildperms(*kargs, **kwargs)
 
         return res
             
+    def buildgroupnames(self, *kargs, **kwargs):
+        self._groupmap = {}
+
+        for group in self._sglist:
+            self._groupmap[group.server_group] = [ server.server for server in group.servers ]
+
+        return self._groupmap
+
     def buildgroups(self, *kargs, **kwargs):
-        self._sglist = {}
+        self._sglist = []
         memblist = self._memblist
+        sgctrl = ServerGroupController()
 
         for memb in memblist:
             sgname = memb.server_group.server_group
-
-            if sgname in self._sglist:
-                continue
-
-            sgctrl = ServerGroupController()
-            sglist = sgctrl.filter(kwargs = { 'group': sgname })
-            self._sglist[sgname] = [ x.server for x in sglist[0].servers ]
+            sg = sgctrl.filter(kwargs = { 'group': sgname }).all()[0]
+            if sg not in self._sglist:
+                self._sglist.append(sg)
 
         return self._sglist
 
@@ -100,7 +106,7 @@ class ProfileController(Controller):
         for memb in memblist:
             permlist = Permission.query.filter_by(location = user.location, role = memb.role)
             for perm in permlist:
-                if perm not in gperms and perm.server.server in self._sglist[memb.server_group.server_group]:
+                if perm not in gperms and perm.server.server in self._groupmap[memb.server_group.server_group]:
                     gperms.append(perm)
         
         return gperms
@@ -119,7 +125,7 @@ class ProfileController(Controller):
 
     def showgroups(self, *kargs, **kwargs):
         print '\nGroups:'
-        sglist = kargs[0]['groups']
+        sglist = kargs[0]['groupnames']
 
         for sgname in sglist:
             srvs = [ '    ' + x for x in sglist[sgname] ]
