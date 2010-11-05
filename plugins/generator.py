@@ -55,21 +55,20 @@ class OpenSSHGenerator(object):
 
 class ScpDispatcher(object):
     def process(self, perm, memb):
-        f = file('authorized_keys_%s_%s' % (perm.login, perm.server.server))
+        args = eval((memb.args in (None, '')) and '{}' or memb.args)
+        f = file('authorized_keys_%s_%s' % (perm.login % args, perm.server.server))
         if perm.command is None:
             print ('%s %s' % (memb.key.key_value, memb.key.key_name)).strip()
         else:
-            print ('%s %s %s' % (perm.command % eval(memb.args), memb.key.key_value, memb.key.key_name)).strip()
+            print ('%s %s %s' % (perm.command % args, memb.key.key_value, memb.key.key_name)).strip()
 
 class StdoutDispatcher(object):
     def process(self, perm, memb):
         if perm.command is None:
             print ('%s %s' % (memb.key.key_value, memb.key.key_name)).strip()
         else:
-            args = memb.args
-            if args == '':
-                args = '{}'
-            print ('%s %s %s' % (perm.command % eval(args), memb.key.key_value, memb.key.key_name)).strip()
+            args = eval((memb.args in (None, '')) and '{}' or memb.args)
+            print ('%s %s %s' % (perm.command % args, memb.key.key_value, memb.key.key_name)).strip()
 
     def reset(self):
         pass
@@ -149,9 +148,11 @@ class GeneratorController(Controller):
                 if perm.server != srv:
                     continue
                 for memb in self._memblist:
+                    args = eval((memb.args in (None, '')) and '{}' or memb.args)
+                    login = perm.login % args
                     if memb.role == perm.role and memb.user.location == perm.location:
-                        if (perm.login, perm.server.server) not in outputsrvlst:
-                            outputsrvlst.append((perm.login, perm.server.server))
+                        if (login, perm.server.server) not in outputsrvlst:
+                            outputsrvlst.append((login, perm.server.server))
                         output.process(perm, memb)
 
         return outputsrvlst
@@ -184,7 +185,8 @@ class FileOutput(object):
         self._filelist = []
 
     def process(self, perm, memb):
-        filename = self._prefix + '_%s_%s' % (perm.login, perm.server.server)
+        args = eval((memb.args in (None, '')) and '{}' or memb.args)
+        filename = self._prefix + '_%s_%s' % (perm.login % args, perm.server.server)
         if filename not in self._filelist:
             self._filelist.append(filename)
             if os.path.exists(filename): os.remove(filename)
@@ -192,13 +194,10 @@ class FileOutput(object):
         f = file(filename, 'a')
 
         try:
-            args = memb.args
-            if args == '':
-                args = '{}'
             if perm.command is None:
                 print >>f, ('%s %s' % (memb.key.key_value, memb.key.key_name)).strip()
             else:
-                print >>f, ('%s %s %s' % (perm.command % eval(args), memb.key.key_value, memb.key.key_name)).strip()
+                print >>f, ('%s %s %s' % (perm.command % args, memb.key.key_value, memb.key.key_name)).strip()
 
         except:
             print "ERROR with: ", perm, memb

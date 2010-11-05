@@ -127,8 +127,12 @@ class MainApp(object):
         if 'add_role' in formkeys:
             RoleController().set(form['role'].value)
         if 'add_permission' in formkeys:
-            PermissionController().set(form['role'].value, form['login'].value, form['location'].value, 
-                    form['server'].value, form['command'].value)
+            role = form['role'].value
+            login = form['login'].value
+            location = form['location'].value
+            server = form['server'].value
+            command = form.has_key('command') and form['command'].value or ''
+            PermissionController().set(role, login, location, server, command)
         for k in formkeys:
             if k.startswith('del_role'):
                 v = k.split('_')[2:]
@@ -138,6 +142,7 @@ class MainApp(object):
                 ServerGroupController().remove(group = v[0])
             if k.startswith('del_perm'):
                 v = k.split('_')[2:]
+                file('db/fb.txt', 'w').write(repr(v) + '\n')
                 PermissionController().remove(server = v[1], role = v[2], login = v[0], location = v[3])
         chars = {}
         chars['all_groups'] = ServerGroupController().filter()

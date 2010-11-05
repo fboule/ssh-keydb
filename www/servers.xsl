@@ -95,7 +95,7 @@
                 <td> <xsl:value-of select='command' /> </td>
                 <td> 
                     <input type='submit' value='-'>
-                        <xsl:attribute name='name'>del_perm_<xsl:value-of select='login' />_<xsl:value-of select='role' />_<xsl:value-of select='location' /></xsl:attribute>
+                        <xsl:attribute name='name'>del_perm_<xsl:value-of select='login' />_<xsl:value-of select='server/@name' />_<xsl:value-of select='role' />_<xsl:value-of select='location' /></xsl:attribute>
                     </input>
                 </td>
         </tr>
@@ -103,7 +103,7 @@
         <tr>
             <td>
                 <select name='server'>
-                    <xsl:for-each select='/page/all_servers/servers'>
+                    <xsl:for-each select='/page/all_servers/server'>
                         <option><xsl:value-of select='@name' /></option>
                     </xsl:for-each>
                 </select>
@@ -117,7 +117,7 @@
             </td>
             <td> <input size='20' type='text' name='login' /> </td>
             <td>
-                <select name='role'>
+                <select name='location'>
                     <xsl:for-each select='/page/all_locations/location'>
                         <option><xsl:value-of select='.' /></option>
                     </xsl:for-each>
