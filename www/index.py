@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 
 import sys, os, os.path
-from subprocess import Popen, PIPE, STDOUT
-
-os.chdir('..')
-sys.path.append(os.getcwd())
-
 import cgi
 import cgitb
-from plugins import *
-from model import * # FIXME
+
+from subprocess import Popen, PIPE, STDOUT
+
+try:
+    from sshkeydb import *
+except:
+    os.chdir(os.pardir)
+    sys.path.append(os.getcwd())
+    from sshkeydb import *
 
 class MainApp(object):
     def run(self):
