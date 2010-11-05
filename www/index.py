@@ -74,7 +74,7 @@ class MainApp(object):
         users = UserController().filter(**flt)
 
         chars['all_locations'] = LocationController().filter()
-        chars['users'] = users.all()
+        chars['users'] = users
 
         return chars
 
@@ -98,7 +98,7 @@ class MainApp(object):
                 MembershipController().revoke(user = form['user'].value, key = v[2], role = v[1], group = v[0])
             if k.startswith('del_key'):
                 v = k.split('_')[2:]
-                membdata = MembershipController().filter(user = form['user'].value, key = v[0]).all()
+                membdata = MembershipController().filter(user = form['user'].value, key = v[0])
                 if len(membdata) > 0:
                     for m in membdata:
                         errors.append((m.server_group.server_group, m.role.role, v[0]))
@@ -109,8 +109,8 @@ class MainApp(object):
         user = chars['userlist'][0]
         del chars['userlist']
         chars['errors'] = errors
-        chars['all_groups'] = ServerGroupController().filter().all()
-        chars['all_roles'] = RoleController().filter().all()
+        chars['all_groups'] = ServerGroupController().filter()
+        chars['all_roles'] = RoleController().filter()
         chars['all_keys'] = user.keys
         chars['user'] = repr(user)
         chars['keys'] = user.keys
@@ -140,9 +140,9 @@ class MainApp(object):
                 v = k.split('_')[2:]
                 PermissionController().remove(server = v[1], role = v[2], login = v[0], location = v[3])
         chars = {}
-        chars['all_groups'] = ServerGroupController().filter().all()
-        chars['all_servers'] = Server.query.filter(None).all() # FIXME
-        chars['all_roles'] = RoleController().filter().all()
+        chars['all_groups'] = ServerGroupController().filter()
+        chars['all_servers'] = ServerController().filter()
+        chars['all_roles'] = RoleController().filter()
         chars['all_permissions'] = PermissionController().filter()
         chars['all_locations'] = LocationController().filter()
         return chars
@@ -205,7 +205,7 @@ class MainApp(object):
                     pubkey = file(pubkeyfile).read()
                     ServerController().key(servername, privkeyfile, 'pubkey', pubkey)
                     chars['updated'].append(pubkeyfile)
-        chars['all_servers'] = Server.query.filter(None).all() # FIXME
+        chars['all_servers'] = ServerController().filter()
         return chars
 
     def apply(self, form):
@@ -227,9 +227,9 @@ class MainApp(object):
                 cmd.append('chown %(login)s ~%(login)s/.ssh/authorized_keys' % data)
                 cmd = ('ssh root@%(fqdn)s "' % data) + '\n'.join(cmd) + '"'
                 res = os.popen(cmd)
-        chars['all_groups'] = ServerGroupController().filter().all()
-        chars['all_servers'] = Server.query.filter(None).all() # FIXME
-        chars['all_roles'] = RoleController().filter().all()
+        chars['all_groups'] = ServerGroupController().filter()
+        chars['all_servers'] = ServerController().filter()
+        chars['all_roles'] = RoleController().filter()
         return chars
 
 if __name__ == '__main__':

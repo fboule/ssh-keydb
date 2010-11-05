@@ -38,7 +38,7 @@ class LocationController(Controller):
         location = Location(location = locname)
 
     def remove(self, *kargs, **kwargs):
-        loclst = self.filter(*kargs, **kwargs).all()
+        loclst = self.filter(*kargs, **kwargs)
         n = len(loclst)
 
         if n > 2:
@@ -61,13 +61,13 @@ class LocationController(Controller):
         else:
             loclst = Location.query.filter_by()
 
-        return loclst
+        return loclst.all()
 
     def list(self, *kargs, **kwargs):
         if len(kargs) > 0:
             raise SyntaxError()
 
-        print self.filter(*kargs, **kwargs).all()
+        print self.filter(*kargs, **kwargs)
 
     set.usage = {
         'shortdesc': 'Manage location',        

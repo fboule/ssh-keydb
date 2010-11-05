@@ -56,7 +56,7 @@ class PermissionController(Controller):
                 if perm.server in grp.servers:
                     permlist.append(perm)
 
-        return permlist
+        return permlist.all()
 
     def set(self, *args, **opts):
         if len(args) < 4:
@@ -97,7 +97,7 @@ class PermissionController(Controller):
 
     def remove(self, *args, **opts):
         permlist = self.filter(*args, **opts)
-        n = permlist.count()
+        n = len(permlist)
 
         if n > 2:
             ch = raw_input('Warning: remove all %i permissions (Y/n)? ' % n)
@@ -114,7 +114,7 @@ class PermissionController(Controller):
         return True
 
     def list(self, *args, **opts):
-        lst = self.filter(*args, **opts).all()
+        lst = self.filter(*args, **opts)
 
         if len(lst) == 0: return
 

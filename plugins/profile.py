@@ -55,7 +55,7 @@ class ProfileController(Controller):
         opts = kwargs
 
         res = {}
-        userlist = self.filter(*kargs, **kwargs).all()
+        userlist = self.filter(*kargs, **kwargs)
         res['userlist'] = userlist
 
         if len(res['userlist']) == 0: 
@@ -216,7 +216,7 @@ class ProfileController(Controller):
         if 'user' in opts: 
             userlist = userlist.filter_by(user = opts['user'])
 
-        return userlist
+        return userlist.all()
 
     show.usage = {        
         'shortdesc': 'Build reports',        

@@ -50,7 +50,7 @@ class MembershipController(Controller):
             if group is None: return None
             memblist = memblist.filter_by(server_group = group)
 
-        return memblist
+        return memblist.all()
 
     def grant(self, *args, **opts):
         if len(args) < 4:
@@ -86,7 +86,7 @@ class MembershipController(Controller):
 
     def revoke(self, *args, **opts):
         memblist = self.filter(*args, **opts)
-        n = memblist.count()
+        n = len(memblist)
 
         if n > 2:
             ch = raw_input('Warning: remove all %i memberships (Y/n)? ' % n)

@@ -39,13 +39,13 @@ class ServerGroupController(Controller):
             if srv is None: return None
             grouplist = grouplist.filter(ServerGroup.servers.any(server = opts['server']))
 
-        return grouplist
+        return grouplist.all()
 
     def list(self, *args, **opts):
         if len(args) > 0:
             raise SyntaxError()
 
-        lst = self.filter(*args, **opts).all()
+        lst = self.filter(*args, **opts)
         for item in lst:
             print item
 
@@ -89,7 +89,7 @@ class ServerGroupController(Controller):
 
     def remove(self, *args, **opts):
         grouplist = self.filter(*args, **opts)
-        n = grouplist.count()
+        n = len(grouplist)
 
         if n > 2:
             ch = raw_input('Warning: remove all %i groups (Y/n)? ' % n)

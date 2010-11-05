@@ -29,7 +29,7 @@ class UserController(Controller):
         args = kargs
         opts = kwargs
 
-        lst = self.filter(*kargs, **kwargs).all()
+        lst = self.filter(*kargs, **kwargs)
 
         if len(lst) == 0: 
             return
@@ -90,7 +90,7 @@ class UserController(Controller):
                 loc = Location.get_by(location = opts['location'])
             userlist = userlist.filter_by(location = loc)
 
-        return userlist
+        return userlist.all()
 
     def set(self, *kargs, **kwargs):
         args = kargs
@@ -136,7 +136,7 @@ class UserController(Controller):
         if userlist is None:
             return
         
-        n = userlist.count()
+        n = len(userlist)
 
         if n > 2:
             ch = raw_input('Warning: remove all %i users (Y/n)? ' % n)

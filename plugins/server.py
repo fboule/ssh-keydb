@@ -35,13 +35,13 @@ class ServerController(Controller):
         if 'server' in opts: 
             serverlist = Server.query.filter_by(server = opts['server'])
 
-        return serverlist
+        return serverlist.all()
 
     def list(self, *args, **opts):
         if len(args) > 0:
             raise SyntaxError()
 
-        lst = self.filter(*args, **opts).all()
+        lst = self.filter(*args, **opts)
         for item in lst:
             print item
 
@@ -89,7 +89,7 @@ class ServerController(Controller):
         if len(args) > 1: fqdn = args[1]
         if len(args) > 2: 
             grpname = args[2]
-            grp = ServerGroupController().filter(group = grpname).all()[0]
+            grp = ServerGroupController().filter(group = grpname)[0]
 
         srvlst = self.filter()
 
@@ -107,7 +107,7 @@ class ServerController(Controller):
 
     def remove(self, *args, **opts):
         serverlst = self.filter(*args, **opts)
-        n = serverlst.count()
+        n = len(serverlst)
 
         if n > 2:
             ch = raw_input('Warning: remove all %i servers (Y/n)? ' % n)

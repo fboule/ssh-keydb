@@ -43,7 +43,7 @@ class RoleController(Controller):
         if 'role' in opts: 
             rolelist = rolelist.filter_by(role = opts['role'])
 
-        return rolelist
+        return rolelist.all()
 
     def set(self, *args, **opts):
         if len(args) != 1:
@@ -63,7 +63,7 @@ class RoleController(Controller):
 
     def remove(self, *kargs, **kwargs):
         rolelist = self.filter(*kargs, **kwargs)
-        n = rolelist.count()
+        n = len(rolelist)
 
         if n > 2:
             print 'Warning: remove all %i roles?' % n

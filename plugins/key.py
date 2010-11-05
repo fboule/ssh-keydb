@@ -29,7 +29,7 @@ class KeyController(Controller):
         opts = kwargs
         lenvalue = 25
 
-        lst = self.filter(*kargs, **kwargs).all()
+        lst = self.filter(*kargs, **kwargs)
 
         if len(lst) == 0: 
             return
@@ -70,7 +70,7 @@ class KeyController(Controller):
             if user is None: return None
             keylist = keylist.filter_by(user = user)
 
-        return keylist
+        return keylist.all()
 
     def set(self, *kargs, **kwargs):
         if len(kargs) != 3:
@@ -122,7 +122,7 @@ class KeyController(Controller):
 
     def remove(self, *kargs, **kwargs):
         keylist = self.filter(*kargs, **kwargs)
-        n = keylist.count()
+        n = len(keylist)
 
         if n > 2:
             ch = raw_input('Warning: remove all %i keys (Y/n)? ' % n)
