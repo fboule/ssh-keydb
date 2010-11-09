@@ -20,7 +20,7 @@
 import sys
 import getopt
 from plugins.help import HelpController
-from plugins.controller import *
+from controller import *
 
 class OptionsController(Controller):
     _g_shortopts = 'd:'
