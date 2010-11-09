@@ -25,7 +25,7 @@ from plugins import *
 from options import *
 
 class MainApp(object):
-    def main(self):
+    def run(self):
         helpctrl = HelpController()
         optsctrl = OptionsController()
 
@@ -46,6 +46,10 @@ class MainApp(object):
             helpctrl.help(args[0])
             sys.exit(2)
 
+        print opts
+
+        dbinit(**opts)
+
         try:
             action(*args[2:], **opts)
         except SyntaxError, ex:
@@ -53,5 +57,5 @@ class MainApp(object):
             sys.exit(2)
 
 if __name__ == '__main__':
-    MainApp().main()
+    MainApp().run()
 

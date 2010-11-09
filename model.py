@@ -19,8 +19,11 @@
 
 from elixir import *
 
-metadata.bind = "sqlite:///db/db.db"
-#metadata.bind.echo = True
+def dbinit(**opts):
+    db = opts.get('db', '/db/db.db')
+    metadata.bind = "sqlite://" + db
+    #metadata.bind.echo = True
+    setup_all(True)
 
 class Location(Entity):
     location = Field(Text, primary_key = True)
@@ -173,4 +176,3 @@ class Permission(Entity):
         s += "</permission>"
         return s
 
-setup_all(True)
