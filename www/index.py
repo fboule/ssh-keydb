@@ -6,17 +6,14 @@ import cgitb
 
 from subprocess import Popen, PIPE, STDOUT
 
-try:
-    from sshkeydb import *
-except:
-    os.chdir(os.pardir)
-    sys.path.append(os.getcwd())
-    from sshkeydb import *
+from ssh_keydb.plugins import *
 
 class MainApp(object):
     def run(self):
         cgitb.enable()
         form = cgi.FieldStorage()
+
+        dbinit()
 
         self.page = 'main'
         if form.has_key('page'):
@@ -37,7 +34,7 @@ class MainApp(object):
                 contentsxml += ''.join([ repr(item) for item in chars[node] ])
                 contentsxml += '</%s>' % node
 
-        contents = file('www/' + self.page + '.xml').read()
+        contents = file(self.page + '.xml').read()
         contents = contents.replace('__CONTENTS__', contentsxml)
 
         print 'Content-Type: text/xml\n'

@@ -91,7 +91,7 @@ class ProfileController(Controller):
 
         for memb in memblist:
             sgname = memb.server_group.server_group
-            sg = sgctrl.filter(kwargs = { 'group': sgname }).all()[0]
+            sg = sgctrl.filter(kwargs = { 'group': sgname })[0]
             if sg not in self._sglist:
                 self._sglist.append(sg)
 
