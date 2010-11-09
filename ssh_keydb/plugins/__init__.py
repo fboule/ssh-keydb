@@ -22,4 +22,4 @@ import os
 for f in os.listdir(__path__[0]):
     if f.endswith('.py') and not f.startswith('__'):
         f = f[:-3]
-        exec('from plugins.%s import *' % f, globals(), locals())
+        exec('from %s import *' % f, globals(), locals())

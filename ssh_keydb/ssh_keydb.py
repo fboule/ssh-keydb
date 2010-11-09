@@ -20,9 +20,9 @@
 # along with ssh-keydb.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-from model import *
-from plugins import *
 from options import *
+from plugins.model import *
+from plugins import *
 
 class MainApp(object):
     def run(self):

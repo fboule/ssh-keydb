@@ -26,6 +26,8 @@ def dbinit(**opts):
     setup_all(True)
 
 class Location(Entity):
+    using_options(tablename='location')
+
     location = Field(Text, primary_key = True)
     users = OneToMany('User')
     permissions = OneToMany('Permission')
@@ -37,6 +39,8 @@ class Location(Entity):
         return self.location
 
 class User(Entity):
+    using_options(tablename='user')
+
     user = Field(Text, primary_key = True)
     section = Field(Text)
     location = ManyToOne('Location')
@@ -57,6 +61,8 @@ class User(Entity):
         return self.user
 
 class Key(Entity):
+    using_options(tablename='key')
+
     key_name = Field(Text, primary_key = True)
     user = ManyToOne('User', column_kwargs={'primary_key': True})
     key_type = ManyToOne('KeyType')
@@ -76,6 +82,8 @@ class Key(Entity):
         return self.key_name
 
 class KeyType(Entity):
+    using_options(tablename='keytype')
+
     key_type = Field(Text, primary_key = True)
     keys = OneToMany('Key')
 
@@ -86,6 +94,8 @@ class KeyType(Entity):
         return self.key_type
 
 class Server(Entity):
+    using_options(tablename='server')
+
     server = Field(Text, primary_key = True)
     fqdn = Field(Text)
     server_group = ManyToOne('ServerGroup')
@@ -105,6 +115,8 @@ class Server(Entity):
         return self.server
 
 class ServerHostKey(Entity):
+    using_options(tablename='serverhostkey')
+
     filename = Field(Text, primary_key = True)
     server = ManyToOne('Server', column_kwargs={'primary_key': True})
     private_key = Field(Text)
@@ -122,6 +134,8 @@ class ServerHostKey(Entity):
         return self.filename
 
 class ServerGroup(Entity):
+    using_options(tablename='servergroup')
+
     server_group = Field(Text, primary_key = True)
     servers = OneToMany('Server')
     memberships = OneToMany('Membership')
@@ -137,6 +151,8 @@ class ServerGroup(Entity):
         return self.server_group
 
 class Role(Entity):
+    using_options(tablename='role')
+
     role = Field(Text, primary_key = True)
     memberships = OneToMany('Membership')
     permissions = OneToMany('Permission')
@@ -148,6 +164,8 @@ class Role(Entity):
         return self.role
 
 class Membership(Entity):
+    using_options(tablename='membership')
+
     user = ManyToOne('User', column_kwargs={'primary_key': True})
     key = ManyToOne('Key', column_kwargs={'primary_key': True})
     server_group = ManyToOne('ServerGroup', column_kwargs={'primary_key': True})
@@ -162,6 +180,8 @@ class Membership(Entity):
         return s
 
 class Permission(Entity):
+    using_options(tablename='permission')
+
     role = ManyToOne('Role', column_kwargs={'primary_key': True})
     server = ManyToOne('Server', column_kwargs={'primary_key': True})
     location = ManyToOne('Location', column_kwargs={'primary_key': True})
