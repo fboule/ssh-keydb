@@ -46,8 +46,6 @@ class MainApp(object):
             helpctrl.help(args[0])
             sys.exit(2)
 
-        print opts
-
         dbinit(**opts)
 
         try:
