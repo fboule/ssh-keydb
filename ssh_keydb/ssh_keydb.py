@@ -54,6 +54,9 @@ class MainApp(object):
             helpctrl.help(args[0])
             sys.exit(2)
 
-if __name__ == '__main__':
+def run():
     MainApp().run()
+
+if __name__ == '__main__':
+    run()
 

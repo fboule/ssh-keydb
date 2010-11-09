@@ -20,8 +20,9 @@
 from elixir import *
 
 def dbinit(**opts):
-    db = opts.get('db', '/db/db.db')
-    metadata.bind = "sqlite://" + db
+    db = opts.get('db', 'db/db.db')
+    metadata.bind = "sqlite:///" + db
+    print metadata.bind
     #metadata.bind.echo = True
     setup_all(True)
 

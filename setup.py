@@ -14,7 +14,7 @@ setup(
 
     entry_points = {
         'console_scripts': [
-            'ssh-keydb = ssh_keydb.ssh_keydb.py:run',
+            'ssh-keydb = ssh_keydb.ssh_keydb:run',
         ],
     },
     
