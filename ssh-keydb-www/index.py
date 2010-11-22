@@ -139,7 +139,6 @@ class MainApp(object):
                 ServerGroupController().remove(group = v[0])
             if k.startswith('del_perm'):
                 v = k.split('_')[2:]
-                file('db/fb.txt', 'w').write(repr(v) + '\n')
                 PermissionController().remove(server = v[1], role = v[2], login = v[0], location = v[3])
         chars = {}
         chars['all_groups'] = ServerGroupController().filter()
@@ -215,20 +214,22 @@ class MainApp(object):
         chars['updated'] = []
         if 'apply' in form.keys():
             lst = GeneratorController().openssh(group = form['group'].value, role = form['role'].value, output = 'keys/new')
-            chars['updated'] = lst
-            for item in lst:
-                server = Server.get_by(server = item[1])
-                data = { 'login': item[0], 'server': server.server, 'fqdn': server.fqdn }
-                data['filename'] = 'new_%s_%s' % (data['login'], data['server'])
-                cmd = 'scp keys/new_%(login)s_%(server)s root@%(fqdn)s:' % data
-                res = os.popen(cmd)
-                cmd = []
-                cmd.append('mv ~%(login)s/.ssh/authorized_keys ~%(login)s/.ssh/authorized_keys.old' % data)
-                cmd.append('mv %(filename)s ~%(login)s/.ssh/authorized_keys' % data)
-                cmd.append('chmod 644 ~%(login)s/.ssh/authorized_keys' % data)
-                cmd.append('chown %(login)s ~%(login)s/.ssh/authorized_keys' % data)
-                cmd = ('ssh root@%(fqdn)s "' % data) + '\n'.join(cmd) + '"'
-                res = os.popen(cmd)
+            chars['updated'] = '<updated>' + ''.join([ '<item>%s</item>' % str(item[1]) for item in lst ]) + '</updated>'
+            if 'push' in form.keys():
+                chars['pushed'] = "<pushed>pushed</pushed>"
+                for item in lst:
+                    server = Server.get_by(server = item[1])
+                    data = { 'login': item[0], 'server': server.server, 'fqdn': server.fqdn }
+                    data['filename'] = 'new_%s_%s' % (data['login'], data['server'])
+                    cmd = 'scp keys/new_%(login)s_%(server)s root@%(fqdn)s:' % data
+                    res = os.popen(cmd)
+                    cmd = []
+                    cmd.append('mv ~%(login)s/.ssh/authorized_keys ~%(login)s/.ssh/authorized_keys.old' % data)
+                    cmd.append('mv %(filename)s ~%(login)s/.ssh/authorized_keys' % data)
+                    cmd.append('chmod 644 ~%(login)s/.ssh/authorized_keys' % data)
+                    cmd.append('chown %(login)s ~%(login)s/.ssh/authorized_keys' % data)
+                    cmd = ('ssh root@%(fqdn)s "' % data) + '\n'.join(cmd) + '"'
+                    res = os.popen(cmd)
         chars['all_groups'] = ServerGroupController().filter()
         chars['all_servers'] = ServerController().filter()
         chars['all_roles'] = RoleController().filter()

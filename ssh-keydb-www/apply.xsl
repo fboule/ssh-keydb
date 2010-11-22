@@ -40,14 +40,20 @@
             </td>
         </tr>
     </table>
+    <p> <input type='checkbox' name='push' value='push'/> Push </p>
     <p> <input type='submit' name='apply' value='Proceed'/> </p>
     </form>
 </div>
 
-<xsl:if test="count(updated) > 0">
+<xsl:if test="count(/page/updated) > 0">
 <div>
-    <xsl:for-each select='updated/item'>
-    <p> Updated <xsl:value-of select='.' /> </p>
+    <xsl:for-each select='/page/updated/item'>
+        <xsl:if test="/page/pushed">
+            <p> Pushed <xsl:value-of select='.' /> </p>
+        </xsl:if>
+        <xsl:if test="not(/page/pushed)">
+            <p> Updated <xsl:value-of select='.' /> </p>
+        </xsl:if>
     </xsl:for-each>
 </div>
 </xsl:if>
