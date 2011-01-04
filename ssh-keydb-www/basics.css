@@ -45,3 +45,23 @@ table
 {
     font-size: 10pt;
 }
+
+img
+{
+    border: none;
+}
+
+a.menu
+{
+    background-color: lightblue;
+    background-position: 0px 60px;
+    width: 468px;
+    height: 60px;
+    display: block;
+}
+
+a.menu:hover
+{
+    background-position: 0px 0px;
+}
+
