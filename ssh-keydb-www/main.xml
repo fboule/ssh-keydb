@@ -3,9 +3,9 @@
 
 <page>
     <menu>
-        <item name='users'>Users management</item> 
         <item name='servers'>Global settings</item>
         <item name='hostkey'>Host keys</item>
+        <item name='users'>Users management</item> 
         <item name='apply'>Apply changes</item>
     </menu>
 </page>

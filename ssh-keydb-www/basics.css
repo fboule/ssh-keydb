@@ -19,6 +19,12 @@ div p.title
     font-weight: bold;
 }
 
+div p.step
+{
+    color: darkcyan;
+    font-weight: bold;
+}
+
 div#header
 {
 }
@@ -65,3 +71,36 @@ a.menu:hover
     background-position: 0px 0px;
 }
 
+strong
+{
+    color: red;
+}
+
+em
+{
+    color: gray;
+}
+
+td
+{
+    vertical-align: top;
+}
+
+p.quote
+{
+    text-indent: 2em;
+}
+
+div.footer
+{
+    margin-top: 4em;
+    text-align: right;
+    font-size: 6pt;
+    color: gray;
+}
+
+div.footer p
+{
+    font-size: 4px;
+    color: lightgray;
+}

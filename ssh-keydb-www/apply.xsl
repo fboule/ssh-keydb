@@ -18,6 +18,7 @@
 <div id='groups'>
     <form method='post' action='?page=apply'>
     <p class='title'> Groups: </p>
+    <p>Select the role and server group to be processed. The authorized_keys files will then be generated for each server in the group and appropriate login, as defined by the permissions.</p>
     <table>
         <tr>
             <th> Group </th>
@@ -40,9 +41,13 @@
             </td>
         </tr>
     </table>
-    <p> <input type='checkbox' name='push' value='push'/> Push </p>
+    <p> <input type='checkbox' name='push' value='push'/>Push the files on the servers</p>
     <p> <input type='submit' name='apply' value='Proceed'/> </p>
     </form>
+</div>
+
+<div>
+    <strong>Warning:</strong> By default, authorized_keys files are only generated locally on the server. The push checkbox will in addition put the generated files on the appropriate servers.
 </div>
 
 <xsl:if test="count(/page/updated) > 0">
