@@ -159,7 +159,7 @@ class GeneratorController(Controller):
 
     openssh.usage = {
         'shortdesc': 'Generate authorization file',    
-        'usage': [ '%(exec)s generate openssh [--server=<server>] [--group=<group>] [--role=<role>] [--login=<login>]' ],
+        'usage': [ '%(exec)s generate openssh [--server=<server>] [--group=<group>] [--role=<role>] [--login=<login>] [--output=<filepath_prefix>]' ],
         'options': {             
             'help': 'displays the current help',
             'server=': 'filters by server name (SHOULD DISAPPEAR)', 

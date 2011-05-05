@@ -91,7 +91,7 @@ class ProfileController(Controller):
 
         for memb in memblist:
             sgname = memb.server_group.server_group
-            sg = sgctrl.filter(kwargs = { 'group': sgname })[0]
+            sg = sgctrl.filter(group = sgname)[0]
             if sg not in self._sglist:
                 self._sglist.append(sg)
 
@@ -176,16 +176,8 @@ class ProfileController(Controller):
         prevrole = ''
         for memb in memblist:
             sg = memb.server_group.server_group
-            if prevsg == sg:
-                sg = ''
-            else:
-                prevsg = sg
 
             role = memb.role.role
-            if prevrole == role:
-                role = ''
-            else:
-                prevrole = role
 
             print ' ',
             print sg + ' ' * (l2 - len(sg)),
