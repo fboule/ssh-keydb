@@ -105,7 +105,7 @@ class MembershipController(Controller):
         return True
 
     def list(self, *args, **opts):
-        lst = self.filter(*args, **opts).all()
+        lst = self.filter(*args, **opts)
 
         if len(lst) == 0: 
             return
