@@ -36,8 +36,10 @@
             </tr>
             <xsl:for-each select='/page/keys/key'>
             <tr> 
-                <td> <input type='submit' value='-'/> 
-                    <xsl:attribute name='name'>del_key_<xsl:value-of select='name' /></xsl:attribute>
+                <td> 
+                    <input type='submit' value='-'> 
+                        <xsl:attribute name='name'>del_key_<xsl:value-of select='name' /></xsl:attribute>
+                    </input>
                 </td>
                 <td> <xsl:value-of select='name' /> </td>
                 <td> <xsl:value-of select='public' /> </td>
