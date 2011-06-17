@@ -68,7 +68,7 @@ class MainApp(object):
             chars['section'] = form['section'].value
             flt['section'] = chars['section']
 
-        users = UserController().filter(**flt)
+        users = sorted(UserController().filter(**flt), key = lambda user: user.user)
 
         chars['all_locations'] = LocationController().filter()
         chars['users'] = users
@@ -141,11 +141,12 @@ class MainApp(object):
                 v = k.split('_')[2:]
                 PermissionController().remove(server = v[1], role = v[2], login = v[0], location = v[3])
         chars = {}
-        chars['all_groups'] = ServerGroupController().filter()
-        chars['all_servers'] = ServerController().filter()
-        chars['all_roles'] = RoleController().filter()
-        chars['all_permissions'] = PermissionController().filter()
-        chars['all_locations'] = LocationController().filter()
+        chars['all_groups'] = sorted(ServerGroupController().filter(), key = lambda group: group.server_group)
+        chars['all_servers'] = sorted(ServerController().filter(), key = lambda server: server.server)
+        chars['all_roles'] = sorted(RoleController().filter(), key = lambda role: role.role)
+        chars['all_permissions'] = sorted(PermissionController().filter(), 
+            key = lambda perm: '%s_%s_%s_%s' % (perm.location.location, perm.server.server, perm.login, perm.role.role))
+        chars['all_locations'] = sorted(LocationController().filter(), key = lambda loc: loc.location)
         return chars
 
     def hostkey(self, form):
