@@ -10,9 +10,13 @@
 
 <div id='user'>
     <p class='title'> 
-        <a href='?page=main'>[H]</a> SSH-KEYDB - 
-        <xsl:value-of select='/page/user' />/<xsl:value-of select='/page/user/@location' />
-        <xsl:if test="/page/user/@section != ''"> (<xsl:value-of select='/page/user/@section' />)</xsl:if>
+        <a href='?page=users'> [U] </a>
+        <a href='?page=main'> SSH-KEYDB </a> - 
+        <a>
+            <xsl:attribute name='href'>?page=user&amp;user=<xsl:value-of select='/page/user'/></xsl:attribute>
+            <xsl:value-of select='/page/user' />/<xsl:value-of select='/page/user/@location' />
+            <xsl:if test="/page/user/@section != ''"> (<xsl:value-of select='/page/user/@section' />)</xsl:if> 
+        </a>
     </p>
 </div>
 

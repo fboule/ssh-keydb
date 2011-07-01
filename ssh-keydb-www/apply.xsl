@@ -11,7 +11,8 @@
 <div id='header'>
     <p class='title'> 
         <a href='?page=main'>[H]</a>
-        SSH-KEYDB - Generate and deploy authorized_keys files
+        <a href='?page=main'> SSH-KEYDB </a> - 
+        Generate and deploy authorized_keys files
     </p>
 </div>
 
