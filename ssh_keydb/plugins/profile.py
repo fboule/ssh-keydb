@@ -41,8 +41,6 @@ class ProfileController(Controller):
 
         for user in userlist:
             s = '%s/%s' % (user.user, user.location.location)
-            if user.section is not None:
-                s = s + ' (%s)' % user.section
             print s
 
             self.showkeys(chars['users'][user])

@@ -19,7 +19,6 @@
     
     <div id='filter'>
         <xsl:variable name="location" select="normalize-space(/page/location)"/>
-        <xsl:variable name="section" select="normalize-space(/page/section)"/>
     
         <xsl:if test="$location != 'None'">
             <span class='set'>
@@ -28,14 +27,7 @@
             </span>
         </xsl:if>
     
-        <xsl:if test="$section != 'None'">
-            <span class='set'>
-                Filter set on the section <xsl:value-of select="$section" />
-                <a href='?page=users'> [Reset] </a>
-            </span>
-        </xsl:if>
-    
-        <xsl:if test="($section = 'None') and ($location = 'None')">
+        <xsl:if test="$location = 'None'">
             <span class='unset'>
                 No filter set.
             </span>
@@ -47,7 +39,6 @@
         <tr>
             <th> Name </th>
             <th> Location </th>
-            <th> Section </th>
             <th> Del. </th>
         </tr>
         <xsl:for-each select='/page/users/user'>
@@ -63,12 +54,6 @@
                     <a>
                         <xsl:attribute name='href'> index.py?page=users&amp;location=<xsl:value-of select='@location' /> </xsl:attribute>
                         <xsl:value-of select='@location' /> 
-                    </a>
-                </td>
-                <td> 
-                    <a>
-                        <xsl:attribute name='href'> index.py?page=users&amp;section=<xsl:value-of select='@section' /> </xsl:attribute>
-                        <xsl:value-of select='@section' /> 
                     </a>
                 </td>
                 <td>
@@ -96,10 +81,6 @@
                     </xsl:for-each>
                 </select>
             </td>
-        </tr>
-        <tr>
-            <th> Section: </th>
-            <td> <input name='addsection' type='text' /> </td>
         </tr>
     </table>
     <input type='submit' name='submit' value='Add' />

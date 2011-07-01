@@ -15,7 +15,6 @@
         <a>
             <xsl:attribute name='href'>?page=user&amp;user=<xsl:value-of select='/page/user'/></xsl:attribute>
             <xsl:value-of select='/page/user' />/<xsl:value-of select='/page/user/@location' />
-            <xsl:if test="/page/user/@section != ''"> (<xsl:value-of select='/page/user/@section' />)</xsl:if> 
         </a>
     </p>
 </div>
