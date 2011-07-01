@@ -43,19 +43,15 @@ class User(Entity):
     using_options(tablename='user')
 
     user = Field(Text, primary_key = True)
-    section = Field(Text)
     location = ManyToOne('Location')
     keys = OneToMany('Key')
     memberships = OneToMany('Membership')
 
     def __repr__(self):
-        section = ''
         location = ''
-        if self.section is not None:
-            section = " section='%s'" % self.section
         if self.location is not None:
             location = " location='%s'" % str(self.location)
-        s = "<user%s%s>%s</user>" % (section, location, self.user)
+        s = "<user%s>%s</user>" % (location, self.user)
         return s
 
     def __str__(self):

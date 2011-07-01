@@ -34,7 +34,7 @@ class UserController(Controller):
         if len(lst) == 0: 
             return
 
-        hdr = { 'user': 'user', 'section': 'section','key': 'key','location': 'location' }
+        hdr = { 'user': 'user', 'key': 'key','location': 'location' }
 
         nl = {}
         for user in lst:
