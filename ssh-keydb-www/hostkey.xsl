@@ -10,7 +10,9 @@
 
 <div id='header'>
     <p class='title'> 
-        <a href='?page=main'>[H]</a> SSH-KEYDB - Retrieve host keys
+        <a href='?page=main'>[H]</a> 
+        <a href='?page=main'> SSH-KEYDB </a> - 
+        Retrieve host keys
     </p>
 </div>
 

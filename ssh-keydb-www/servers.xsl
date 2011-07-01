@@ -11,7 +11,8 @@
 <div id='header'>
     <p class='title'> 
         <a href='?page=main'>[H]</a>
-        SSH-KEYDB - Servers
+        <a href='?page=main'> SSH-KEYDB </a> - 
+        Servers
     </p>
 </div>
 

@@ -57,6 +57,18 @@ img
     border: none;
 }
 
+p.title a
+{
+    color: lightblue;
+    text-decoration: none;
+}
+
+p.title a:hover
+{
+    color: lightblue;
+    text-decoration: underline;
+}
+
 a.menu
 {
     background-color: lightblue;
