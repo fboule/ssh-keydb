@@ -213,10 +213,11 @@ class ProfileController(Controller):
         'usage': [ '%(exec)s profile show [--user=<user>]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'user=': 'filter by user',
             'long': 'long display',
         },        
-        'shortopts': { 'help': 'h', 'long': 'l' }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', 'long': 'l' }    
     }    
 
     usage = {         

@@ -39,16 +39,15 @@ class UserController(Controller):
         nl = {}
         for user in lst:
             nl['user'] = max(nl.get('user', len(hdr['user'])), len(user.user))
-            nl['section'] = max(nl.get('section', len(hdr['section'])), len(user.section or ''))
             if user.location is not None: nl['location'] = max(nl.get('location', len(hdr['location'])), len(user.location.location or ''))
             for k in user.keys:
                 nl['key'] = max(nl.get('key', len(hdr['key'])), len(k.key_name))
             
-        fmt = '%%(user)-%(user)is %%(section)-%(section)is %%(location)-%(location)is' % nl
+        fmt = '%%(user)-%(user)is %%(location)-%(location)is' % nl
         n = sum(nl.values()) - nl['key'] + len(nl) - 2
 
         if 'long' in opts:
-            fmt = '%%(user)-%(user)is %%(section)-%(section)is %%(location)-%(location)is %%(key)-%(key)is' % nl
+            fmt = '%%(user)-%(user)is %%(location)-%(location)is %%(key)-%(key)is' % nl
             n = sum(nl.values()) + len(nl) - 1
 
         print fmt % hdr
@@ -59,11 +58,11 @@ class UserController(Controller):
             k = kl.get(0)
             kn = ''
             if k: kn = k.key_name
-            print fmt % { 'user': user.user, 'section': user.section or '', 'key': kn, 'location': user.location.location or '' }
+            print fmt % { 'user': user.user, 'key': kn, 'location': user.location.location or '' }
             if 'long' in opts:
                 for ii in range(1, len(kl)):
                     k = kl[ii]
-                    print fmt % { 'user': '', 'section': '', 'location': '', 'key': k.key_name }
+                    print fmt % { 'user': '', 'location': '', 'key': k.key_name }
 
 
     def filter(self, *kargs, **kwargs):
@@ -77,12 +76,6 @@ class UserController(Controller):
 
         if 'user' in opts: 
             userlist = userlist.filter_by(user = opts['user'])
-
-        if 'section' in opts: 
-            sectionname = None
-            if opts['section'] != '':
-                sectionname = opts['section']
-            userlist = userlist.filter_by(section = sectionname)
 
         if 'location' in opts: 
             loc = None
@@ -101,9 +94,6 @@ class UserController(Controller):
 
         username = args[0]
         location = args[1]
-        sectionname = None
-
-        if len(args) > 2: sectionname = args[2]
 
         user = User.get_by(user = username)
         location = Location.get_by(location = location)
@@ -113,12 +103,10 @@ class UserController(Controller):
             sys.exit(1)
 
         if user is None:
-            user = User(user = username, section = sectionname, location = location)
+            user = User(user = username, location = location)
         else:
             if len(args) > 1:
                 user.location = location
-            if len(args) > 2:
-                user.section = sectionname
 
         if 'keyfile' in opts: 
             KeyController().setkeyfile(user, opts['keyfile'])
@@ -145,9 +133,6 @@ class UserController(Controller):
                 sys.exit(1)
 
         for user in userlist:
-            section = user.section or ''
-            if section != '':
-                section = section + ', '
             for key in user.keys:
                 key.delete()
             user.delete()
@@ -159,38 +144,39 @@ class UserController(Controller):
 
     list.usage = {        
         'shortdesc': 'Manage users',        
-        'usage': [ '%(exec)s user list [--user=<user>] [--section=<section>] [--location=<location>] [--long]' ],
+        'usage': [ '%(exec)s user list [--user=<user>] [--location=<location>] [--long]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'user=': 'filter by user',
-            'section=': 'filter by section',
             'location=': 'filter by location',
             'long': 'long display',
         },        
-        'shortopts': { 'help': 'h', 'long': 'l' }    
+        'shortopts': { 'help': 'h', 'long': 'l', 'dbpath': 'd:', }
     }    
 
     set.usage = {        
         'shortdesc': 'Manage users',        
-        'usage': [ '%(exec)s user set <user> <location> [<section>] [--keyfile=<keyfile>] [--keystring=<string>]' ],
+        'usage': [ '%(exec)s user set <user> <location> [--keyfile=<keyfile>] [--keystring=<string>]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'keyfile=': 'set/filter by key from file',
             'keystring=': 'set/filter by key from string',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
 
     remove.usage = {        
         'shortdesc': 'Manage users',        
-        'usage': [ '%(exec)s user remove [--user=<user>] [--section=<section>] [--key=<key>]' ],
+        'usage': [ '%(exec)s user remove [--user=<user>] [--key=<key>]' ],
         'options': {             
             'help': 'displays the current help',        
-            'section=': 'filter by section name',
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'user=': 'filter by user name',
             'key=': 'set/filter by key name',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
 
     usage = {         

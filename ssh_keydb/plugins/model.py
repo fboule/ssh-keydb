@@ -18,11 +18,15 @@
 # along with ssh-keydb.  If not, see <http://www.gnu.org/licenses/>.
 
 from elixir import *
+import os.path
 
 def dbinit(**opts):
-    db = opts.get('db', 'db/db.db')
+    DATABASEPATH = opts.get('dbpath', os.path.expanduser('~/.ssh-keydb.db'))
+    if os.path.isdir(DATABASEPATH):
+        DATABASEPATH = DATABASEPATH + os.sep + '.ssh-keydb.db'
+    db = opts.get('db', DATABASEPATH)
     metadata.bind = "sqlite:///" + db
-    print metadata.bind
+    #print metadata.bind
     #metadata.bind.echo = True
     setup_all(True)
 

@@ -138,8 +138,9 @@ class MembershipController(Controller):
         'usage': [ '%(exec)s membership grant <user> <key> <role> <group> [<args>]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     revoke.usage = {        
@@ -147,12 +148,13 @@ class MembershipController(Controller):
         'usage': [ '%(exec)s membership revoke [--group=<group>] [--role=<role>] [--key=<key>] [--user=<user>]' ],
         'options': {             
             'help': 'displays the current help',
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'role=': 'filter by role',
             'group=': 'filter by server group',
             'key=': 'filter by key name',
             'user=': 'filter by user name',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     list.usage = {        
@@ -160,13 +162,14 @@ class MembershipController(Controller):
         'usage': [ '%(exec)s membership list [--group=<group>] [--role=<role>] [--key=<key>] [--user=<user>] [--long]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'role=': 'filter by role',
             'group=': 'filter by server group',
             'key=': 'filter by key name',
             'user=': 'filter by user name',
             'long': 'display all columns',
         },        
-        'shortopts': { 'help': 'h', 'long': 'l' }
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', 'long': 'l' }
     }    
     
     usage = {         

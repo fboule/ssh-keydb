@@ -146,8 +146,9 @@ class PermissionController(Controller):
         'usage': [ '%(exec)s permission set <role> <login> <location> <server> [<command>]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     remove.usage = {        
@@ -155,13 +156,14 @@ class PermissionController(Controller):
         'usage': [ '%(exec)s permission remove [--server=<server>] [--role=<role>] [--login=<login>] [--group=<group>] [--location=<location>]' ],
         'options': {             
             'help': 'displays the current help',
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'role=': 'filter by role',
             'group=': 'filter by server group',
 	    'location=': 'filter by location',
             'server=': 'filter by server name',
             'login=': 'filter by login name',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     list.usage = {        
@@ -169,6 +171,7 @@ class PermissionController(Controller):
         'usage': [ '%(exec)s permission list [--server=<server>] [--role=<role>] [--login=<login>] [--group=<group>] [--location=<location>] [--long]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'role=': 'filter by role',
             'group=': 'filter by server group',
             'server=': 'filter by server name',
@@ -176,7 +179,7 @@ class PermissionController(Controller):
             'location=': 'filter by location',
             'long': 'display all columns',
         },        
-        'shortopts': { 'help': 'h', 'long': 'l' }
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', 'long': 'l' }
     }    
     
     usage = {         

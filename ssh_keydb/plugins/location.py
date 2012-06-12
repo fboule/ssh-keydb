@@ -74,8 +74,9 @@ class LocationController(Controller):
         'usage': [ '%(exec)s location set <location>' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     remove.usage = {        
@@ -83,8 +84,9 @@ class LocationController(Controller):
         'usage': [ '%(exec)s location remove <location>' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     list.usage = {        
@@ -92,8 +94,9 @@ class LocationController(Controller):
         'usage': [ '%(exec)s location list [<location>]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     usage = {         

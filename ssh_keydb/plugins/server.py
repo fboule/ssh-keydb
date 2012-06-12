@@ -128,8 +128,9 @@ class ServerController(Controller):
         'usage': [ '%(exec)s server set <server> [<fqdn> [<servergroup>] ]' ],
         'options': {             
             'help': 'displays the current help',
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
 
     key.usage = {
@@ -140,8 +141,9 @@ class ServerController(Controller):
         ],
         'options': {             
             'help': 'displays the current help',
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     
@@ -150,9 +152,10 @@ class ServerController(Controller):
         'usage': [ '%(exec)s server remove [--server=<server>]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'server=': 'filter by server name',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     list.usage = {        
@@ -160,9 +163,10 @@ class ServerController(Controller):
         'usage': [ '%(exec)s server list [--server=<server>]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'server=': 'filter by server name',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     usage = {         

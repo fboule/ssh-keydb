@@ -23,8 +23,8 @@ from plugins.help import HelpController
 from plugins.controller import *
 
 class OptionsController(Controller):
-    _g_shortopts = 'd:'
-    _g_longopts = 'db='
+    _g_shortopts = ''
+    _g_longopts = ''
 
     def options(self, *kargs, **kwargs):
         commandids = []

@@ -162,6 +162,7 @@ class GeneratorController(Controller):
         'usage': [ '%(exec)s generate openssh [--server=<server>] [--group=<group>] [--role=<role>] [--login=<login>] [--output=<filepath_prefix>]' ],
         'options': {             
             'help': 'displays the current help',
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'server=': 'filters by server name (SHOULD DISAPPEAR)', 
             'group=': 'filters by server group name',
             'role=': 'filters by role name',
@@ -169,7 +170,7 @@ class GeneratorController(Controller):
             #'scp': 'transfers authorized_keys files to the appropriate login/server',
             'output=': 'outputs to file instead of standard output',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:' }    
     }    
     
     usage = {         

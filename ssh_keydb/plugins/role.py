@@ -82,8 +82,9 @@ class RoleController(Controller):
         'usage': [ '%(exec)s role set <role>' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     remove.usage = {        
@@ -91,9 +92,10 @@ class RoleController(Controller):
         'usage': [ '%(exec)s role remove [--role=<role>]' ],
         'options': {             
             'help': 'displays the current help',
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'role=': 'filter by role name',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     list.usage = {        
@@ -101,9 +103,10 @@ class RoleController(Controller):
         'usage': [ '%(exec)s role list [--role=<role>]' ],
         'options': {             
             'help': 'displays the current help',
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'role=': 'filter by role name',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     usage = {         

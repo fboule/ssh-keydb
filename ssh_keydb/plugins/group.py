@@ -108,9 +108,10 @@ class ServerGroupController(Controller):
         'usage': [ '%(exec)s group set [--append] <group> <server1> [<server2>...]' ],
         'options': {             
             'help': 'displays the current help',
+            'dbpath=': 'database path (/.ssh-keydb.db by default)',
             'append': 'append servers to the group',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', 'dbpath': 'd:', }    
     }    
     
     remove.usage = {        
@@ -118,10 +119,11 @@ class ServerGroupController(Controller):
         'usage': [ '%(exec)s group remove [--group=<group>] [--server=<server>]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (/.ssh-keydb.db by default)',
             'group=': 'filter by server group name',
             'server=': 'filter by server name',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', 'dbpath': 'd:', }    
     }    
     
     list.usage = {        
@@ -129,10 +131,11 @@ class ServerGroupController(Controller):
         'usage': [ '%(exec)s group list [--group=<group>] [--server=<server>]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (/.ssh-keydb.db by default)',
             'group=': 'filter by server group name',
             'server=': 'filter by server name',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
     
     usage = {         

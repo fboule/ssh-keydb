@@ -137,8 +137,9 @@ class HelpController(Controller):
         'options': {             
             'intro': 'displays short introduction',        
             'help': 'displays help on help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
 
 HelpController()

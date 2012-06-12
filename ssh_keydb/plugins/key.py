@@ -141,11 +141,12 @@ class KeyController(Controller):
         'usage': [ '%(exec)s key list [--user=<user>] [--key=<key>] [--type=<type>]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'user=': 'filter by user',
             'key=': 'filter by key',
             'type=': 'filter by type',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
 
     set.usage = {        
@@ -155,8 +156,9 @@ class KeyController(Controller):
             '%(exec)s key set <user> keyfile <keyfile>' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
 
     remove.usage = {        
@@ -164,10 +166,11 @@ class KeyController(Controller):
         'usage': [ '%(exec)s key remove [--user=<user>] [--key=<key>]' ],
         'options': {             
             'help': 'displays the current help',        
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'user=': 'filter by user',
             'key=': 'filter by key',
         },        
-        'shortopts': { 'help': 'h', }    
+        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
     }    
 
     usage = {         
