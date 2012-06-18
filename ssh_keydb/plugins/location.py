@@ -37,6 +37,11 @@ class LocationController(Controller):
 
         location = Location(location = locname)
 
+        session.flush()
+        session.commit()
+
+        return True
+
     def remove(self, *kargs, **kwargs):
         loclst = self.filter(*kargs, **kwargs)
         n = len(loclst)
@@ -59,7 +64,7 @@ class LocationController(Controller):
             locname = kargs[0]
             loclst = Location.query.filter_by(location = locname)
         else:
-            loclst = Location.query.filter_by()
+            loclst = Location.query.filter(None)
 
         return loclst.all()
 
