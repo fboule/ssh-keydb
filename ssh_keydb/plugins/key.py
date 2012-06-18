@@ -99,17 +99,22 @@ class KeyController(Controller):
 
     def setkeystring(self, user, keystring):
         items = keystring.split(' ', 2)
-        key = Key.get_by(key_name = items[2], user = user)
 
-        if key is not None: 
-            return False
+        keyname = items[2]
+        ii = 0
+        key = Key.get_by(key_name = keyname, user = user)
+
+        while key is not None:
+            keyname = items[2] + '.' + str(ii)
+            key = Key.get_by(key_name = keyname, user = user)
+            ii = ii + 1
         
         keytype = KeyType.get_by(key_type = items[0])
         
         if keytype is None: 
             keytype = KeyType(key_type = items[0])
         
-        key = Key(key_name = items[2], key_value = ' '.join(items[0:2]), key_type = keytype, user = user)
+        key = Key(key_name = keyname, key_value = ' '.join(items[0:2]), key_type = keytype, user = user)
 
         session.flush()
         session.commit()
