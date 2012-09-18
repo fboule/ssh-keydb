@@ -20,7 +20,7 @@
 import sys
 
 from model import *
-from controller import Controller
+from skeletool.controller import Controller
 from group import *
 
 __all__ = [ 'ServerController' ]

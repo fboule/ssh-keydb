@@ -19,7 +19,7 @@
 
 import sys
 from model import *
-from controller import Controller
+from skeletool.controller import Controller
 from key import KeyController
 from membership import MembershipController
 from group import ServerGroupController

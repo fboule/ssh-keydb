@@ -19,7 +19,7 @@
 
 import sys
 from model import *
-from controller import Controller
+from skeletool.controller import Controller
 
 __all__ = [ 'MembershipController' ]
 

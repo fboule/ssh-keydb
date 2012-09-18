@@ -19,7 +19,7 @@
 
 import os, os.path, sys
 from model import *
-from controller import Controller
+from skeletool.controller import Controller
 
 __all__ = [ 'GeneratorController' ]
 

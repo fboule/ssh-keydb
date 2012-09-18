@@ -20,39 +20,13 @@
 # along with ssh-keydb.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-from options import *
+from skeletool.options import *
 from plugins.model import *
 from plugins import *
 
-class MainApp(object):
-    def run(self):
-        helpctrl = HelpController()
-        optsctrl = OptionsController()
+from skeletool import *
 
-        opts, args = optsctrl.parse(sys.argv)
-
-        try:
-            action = optsctrl.action(args)
-        except SyntaxError, ex:
-            if ex.msg is not None:
-                print ex
-                print
-            action = None
-
-        if action is None:
-            helpctrl.help()
-            sys.exit(2)
-        elif 'h' in opts or 'help' in opts or len(args) < 2:
-            helpctrl.help(args[0])
-            sys.exit(2)
-
-        dbinit(**opts)
-
-        try:
-            action(*args[2:], **opts)
-        except SyntaxError, ex:
-            helpctrl.help(args[0])
-            sys.exit(2)
+APPNAME = 'ssh_keydb'
 
 def run():
     MainApp().run()
