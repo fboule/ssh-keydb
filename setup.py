@@ -6,7 +6,7 @@ setup(
     packages = find_packages(),
 
     # Dependencies
-    install_requires = [ 'elixir>=0.7.1', 'pysqlite>=2.5', 'skeletool>=0.1' ],
+    install_requires = [ 'elixir>=0.7.1', 'pysqlite>=2.5', 'skeletool>=0.1dev' ],
 
     package_data = {
         '': [ 'COPYING', "*.txt" ],
