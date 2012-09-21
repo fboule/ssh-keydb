@@ -26,10 +26,8 @@ from plugins import *
 
 from skeletool import *
 
-APPNAME = 'ssh_keydb'
-
 def run():
-    MainApp().run()
+    MainApp('ssh_keydb').run()
 
 if __name__ == '__main__':
     run()
