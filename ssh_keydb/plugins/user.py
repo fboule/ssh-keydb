@@ -22,7 +22,8 @@ from model import *
 from skeletool.controller import Controller
 from key import KeyController
 
-__all__ = [ 'UserController' ]
+__all__ = ['UserController']
+
 
 class UserController(Controller):
     def list(self, *kargs, **kwargs):
@@ -31,18 +32,19 @@ class UserController(Controller):
 
         lst = self.filter(*kargs, **kwargs)
 
-        if len(lst) == 0: 
+        if len(lst) == 0:
             return
 
-        hdr = { 'user': 'user', 'key': 'key','location': 'location' }
+        hdr = {'user': 'user', 'key': 'key', 'location': 'location'}
 
         nl = {}
         for user in lst:
             nl['user'] = max(nl.get('user', len(hdr['user'])), len(user.user))
-            if user.location is not None: nl['location'] = max(nl.get('location', len(hdr['location'])), len(user.location.location or ''))
+            if user.location is not None:
+                nl['location'] = max(nl.get('location', len(hdr['location'])), len(user.location.location or ''))
             for k in user.keys:
                 nl['key'] = max(nl.get('key', len(hdr['key'])), len(k.key_name))
-            
+
         fmt = '%%(user)-%(user)is %%(location)-%(location)is' % nl
         n = sum(nl.values()) - nl['key'] + len(nl) - 2
 
@@ -57,13 +59,13 @@ class UserController(Controller):
             kl = dict(enumerate(user.keys))
             k = kl.get(0)
             kn = ''
-            if k: kn = k.key_name
-            print fmt % { 'user': user.user, 'key': kn, 'location': user.location.location or '' }
+            if k:
+                kn = k.key_name
+            print fmt % {'user': user.user, 'key': kn, 'location': user.location.location or ''}
             if 'long' in opts:
                 for ii in range(1, len(kl)):
                     k = kl[ii]
-                    print fmt % { 'user': '', 'location': '', 'key': k.key_name }
-
+                    print fmt % {'user': '', 'location': '', 'key': k.key_name}
 
     def filter(self, *kargs, **kwargs):
         if len(kargs) > 0:
@@ -74,14 +76,14 @@ class UserController(Controller):
 
         userlist = User.query.filter(None)
 
-        if 'user' in opts: 
-            userlist = userlist.filter_by(user = opts['user'])
+        if 'user' in opts:
+            userlist = userlist.filter_by(user=opts['user'])
 
-        if 'location' in opts: 
+        if 'location' in opts:
             loc = None
             if opts['location'] != '':
-                loc = Location.get_by(location = opts['location'])
-            userlist = userlist.filter_by(location = loc)
+                loc = Location.get_by(location=opts['location'])
+            userlist = userlist.filter_by(location=loc)
 
         return userlist.all()
 
@@ -95,22 +97,22 @@ class UserController(Controller):
         username = args[0]
         location = args[1]
 
-        user = User.get_by(user = username)
-        location = Location.get_by(location = location)
+        user = User.get_by(user=username)
+        location = Location.get_by(location=location)
 
         if location is None:
             print 'Error: location does not exist.'
             sys.exit(1)
 
         if user is None:
-            user = User(user = username, location = location)
+            user = User(user=username, location=location)
         else:
             if len(args) > 1:
                 user.location = location
 
-        if 'keyfile' in opts: 
+        if 'keyfile' in opts:
             KeyController().setkeyfile(user, opts['keyfile'])
-        elif 'keystring' in opts: 
+        elif 'keystring' in opts:
             KeyController().setkeystring(user, opts['keystring'])
 
         session.flush()
@@ -123,7 +125,7 @@ class UserController(Controller):
 
         if userlist is None:
             return
-        
+
         n = len(userlist)
 
         if n > 2:
@@ -142,47 +144,47 @@ class UserController(Controller):
 
         return True
 
-    list.usage = {        
-        'shortdesc': 'Manage users',        
-        'usage': [ '%(exec)s user list [--user=<user>] [--location=<location>] [--long]' ],
-        'options': {             
-            'help': 'displays the current help',        
+    list.usage = {
+        'shortdesc': 'Manage users',
+        'usage': ['%(exec)s user list [--user=<user>] [--location=<location>] [--long]'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'user=': 'filter by user',
             'location=': 'filter by location',
             'long': 'long display',
-        },        
-        'shortopts': { 'help': 'h', 'long': 'l', 'dbpath': 'd:', }
-    }    
+        },
+        'shortopts': {'help': 'h', 'long': 'l', 'dbpath': 'd:', }
+    }
 
-    set.usage = {        
-        'shortdesc': 'Manage users',        
-        'usage': [ '%(exec)s user set <user> <location> [--keyfile=<keyfile>] [--keystring=<string>]' ],
-        'options': {             
-            'help': 'displays the current help',        
+    set.usage = {
+        'shortdesc': 'Manage users',
+        'usage': ['%(exec)s user set <user> <location> [--keyfile=<keyfile>] [--keystring=<string>]'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'keyfile=': 'set/filter by key from file',
             'keystring=': 'set/filter by key from string',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
 
-    remove.usage = {        
-        'shortdesc': 'Manage users',        
-        'usage': [ '%(exec)s user remove [--user=<user>] [--key=<key>]' ],
-        'options': {             
-            'help': 'displays the current help',        
+    remove.usage = {
+        'shortdesc': 'Manage users',
+        'usage': ['%(exec)s user remove [--user=<user>] [--key=<key>]'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'user=': 'filter by user name',
             'key=': 'set/filter by key name',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
 
-    usage = {         
-        'command': [ 'user' ],
-        'shortdesc': 'Manage users',    
-    } 
+    usage = {
+        'command': ['user'],
+        'shortdesc': 'Manage users',
+    }
 
 UserController()
 

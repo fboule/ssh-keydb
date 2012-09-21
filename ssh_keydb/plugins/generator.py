@@ -17,11 +17,14 @@
 # You should have received a copy of the GNU General Public License
 # along with ssh-keydb.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, os.path, sys
+import os
+import os.path
+import sys
 from model import *
 from skeletool.controller import Controller
 
-__all__ = [ 'GeneratorController' ]
+__all__ = ['GeneratorController']
+
 
 class OpenSSHGenerator(object):
     def run(self):
@@ -32,7 +35,7 @@ class OpenSSHGenerator(object):
 #
 #        for srv in srvlst:
 #            srvgrp = srv.server_group
-#            if login is not None: 
+#            if login is not None:
 #                perms = Permission.query.filter_by(login = login, server = srv)
 #            else:
 #                perms = Permission.query.filter_by(role = role, server = srv)
@@ -53,6 +56,7 @@ class OpenSSHGenerator(object):
 #
         return True
 
+
 class ScpDispatcher(object):
     def process(self, perm, memb):
         args = eval((memb.args in (None, '')) and '{}' or memb.args)
@@ -61,6 +65,7 @@ class ScpDispatcher(object):
             print ('%s %s' % (memb.key.key_value, memb.key.key_name)).strip()
         else:
             print ('%s %s %s' % (perm.command % args, memb.key.key_value, memb.key.key_name)).strip()
+
 
 class StdoutDispatcher(object):
     def process(self, perm, memb):
@@ -73,20 +78,23 @@ class StdoutDispatcher(object):
     def reset(self):
         pass
 
+
 class GeneratorController(Controller):
     def parse(self, *args, **opts):
         rolelist = []
         srvlst = None
 
         if 'group' in opts:
-            grp = ServerGroup.get_by(server_group = opts['group'])
-            if grp is None: return False
+            grp = ServerGroup.get_by(server_group=opts['group'])
+            if grp is None:
+                return False
             srvlst = grp.servers
 
         if 'server' in opts:
-            srv = Server.get_by(server = opts['server'])
-            if srv is None: return False
-            srvlst = [ srv ]
+            srv = Server.get_by(server=opts['server'])
+            if srv is None:
+                return False
+            srvlst = [srv]
             grp = srv.server_group
 
         if srvlst is None:
@@ -98,25 +106,27 @@ class GeneratorController(Controller):
             return False
 
         if 'role' in opts:
-            role = Role.get_by(role = opts['role'])
-            lst = Permission.query.filter_by(role = role).all()
+            role = Role.get_by(role=opts['role'])
+            lst = Permission.query.filter_by(role=role).all()
             loginlist = []
             for perm in lst:
-                if perm.login not in loginlist: loginlist.append(perm.login)
+                if perm.login not in loginlist:
+                    loginlist.append(perm.login)
         else:
-            loginlist = [ opts['login'] ]
+            loginlist = [opts['login']]
 
         permlist = []
         memblist = []
         for login in loginlist:
-            lst = Permission.query.filter_by(login = login).all()
+            lst = Permission.query.filter_by(login=login).all()
 
             for perm in lst:
                 if perm.server in srvlst:
                     permlist.append(perm)
-                    if perm.role not in rolelist: rolelist.append(perm.role)
+                    if perm.role not in rolelist:
+                        rolelist.append(perm.role)
 
-        lst = Membership.query.filter_by(server_group = grp)
+        lst = Membership.query.filter_by(server_group=grp)
         for memb in lst:
             if memb.role in rolelist:
                 memblist.append(memb)
@@ -138,7 +148,8 @@ class GeneratorController(Controller):
         if not self.parse(*args, **opts):
             sys.exit(1)
 
-        if 'output' in opts: output = FileOutput(opts['output'])
+        if 'output' in opts:
+            output = FileOutput(opts['output'])
 
         output.reset()
 
@@ -158,28 +169,29 @@ class GeneratorController(Controller):
         return outputsrvlst
 
     openssh.usage = {
-        'shortdesc': 'Generate authorization file',    
-        'usage': [ '%(exec)s generate openssh [--server=<server>] [--group=<group>] [--role=<role>] [--login=<login>] [--output=<filepath_prefix>]' ],
-        'options': {             
+        'shortdesc': 'Generate authorization file',
+        'usage': ['%(exec)s generate openssh [--server=<server>] [--group=<group>] [--role=<role>] [--login=<login>] [--output=<filepath_prefix>]'],
+        'options': {
             'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
-            'server=': 'filters by server name (SHOULD DISAPPEAR)', 
+            'server=': 'filters by server name (SHOULD DISAPPEAR)',
             'group=': 'filters by server group name',
             'role=': 'filters by role name',
             'login=': 'filters by login name',
             #'scp': 'transfers authorized_keys files to the appropriate login/server',
             'output=': 'outputs to file instead of standard output',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:' }    
-    }    
-    
-    usage = {         
-        'command': [ 'generate', 'gen' ],        
-        'shortdesc': 'Generate authorization file',    
-    } 
-    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:'}
+    }
+
+    usage = {
+        'command': ['generate', 'gen'],
+        'shortdesc': 'Generate authorization file',
+    }
+
+
 class FileOutput(object):
-    def __init__(self, prefix = None):
+    def __init__(self, prefix=None):
         self._prefix = prefix
 
     def reset(self):
@@ -190,7 +202,8 @@ class FileOutput(object):
         filename = self._prefix + '_%s_%s' % (perm.login % args, perm.server.server)
         if filename not in self._filelist:
             self._filelist.append(filename)
-            if os.path.exists(filename): os.remove(filename)
+            if os.path.exists(filename):
+                os.remove(filename)
 
         f = file(filename, 'a')
 
@@ -212,4 +225,3 @@ GeneratorController()
 if __name__ == '__main__':
     c = GeneratorController()
     c.list()
-

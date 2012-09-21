@@ -22,7 +22,8 @@ import sys
 from model import *
 from skeletool.controller import Controller
 
-__all__ = [ 'RoleController' ]
+__all__ = ['RoleController']
+
 
 class RoleController(Controller):
     def list(self, *kargs, **kwargs):
@@ -40,8 +41,8 @@ class RoleController(Controller):
 
         rolelist = Role.query.filter(None)
 
-        if 'role' in opts: 
-            rolelist = rolelist.filter_by(role = opts['role'])
+        if 'role' in opts:
+            rolelist = rolelist.filter_by(role=opts['role'])
 
         return rolelist.all()
 
@@ -51,10 +52,10 @@ class RoleController(Controller):
 
         rolename = args[0]
 
-        role = Role.get_by(role = rolename)
+        role = Role.get_by(role=rolename)
 
         if role is None:
-            role = Role(role = rolename)
+            role = Role(role=rolename)
 
         session.flush()
         session.commit()
@@ -78,45 +79,44 @@ class RoleController(Controller):
         return True
 
     set.usage = {
-        'shortdesc': 'Manage role',        
-        'usage': [ '%(exec)s role set <role>' ],
-        'options': {             
-            'help': 'displays the current help',        
+        'shortdesc': 'Manage role',
+        'usage': ['%(exec)s role set <role>'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
-    
-    remove.usage = {        
-        'shortdesc': 'Manage role',        
-        'usage': [ '%(exec)s role remove [--role=<role>]' ],
-        'options': {             
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
+
+    remove.usage = {
+        'shortdesc': 'Manage role',
+        'usage': ['%(exec)s role remove [--role=<role>]'],
+        'options': {
             'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'role=': 'filter by role name',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
-    
-    list.usage = {        
-        'shortdesc': 'Manage role',        
-        'usage': [ '%(exec)s role list [--role=<role>]' ],
-        'options': {             
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
+
+    list.usage = {
+        'shortdesc': 'Manage role',
+        'usage': ['%(exec)s role list [--role=<role>]'],
+        'options': {
             'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'role=': 'filter by role name',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
-    
-    usage = {         
-        'command': [ 'role' ],        
-        'shortdesc': 'Manage role',    
-    } 
-    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
+
+    usage = {
+        'command': ['role'],
+        'shortdesc': 'Manage role',
+    }
+
 RoleController()
 
 if __name__ == '__main__':
     c = RoleController()
     c.list()
-

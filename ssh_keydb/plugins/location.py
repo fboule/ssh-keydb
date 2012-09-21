@@ -21,21 +21,22 @@ import sys
 from model import *
 from skeletool.controller import Controller
 
-__all__ = [ 'LocationController' ]
+__all__ = ['LocationController']
+
 
 class LocationController(Controller):
     def set(self, *kargs, **kwargs):
         if len(kargs) != 1:
             raise SyntaxError()
-    
+
         locname = kargs[0]
-        location = Location.get_by(location = locname)
-    
+        location = Location.get_by(location=locname)
+
         if location is not None:
             print 'Error: already exists.'
             raise AlreadyExists()
 
-        location = Location(location = locname)
+        location = Location(location=locname)
 
         session.flush()
         session.commit()
@@ -51,18 +52,18 @@ class LocationController(Controller):
             if ch != 'Y':
                 print 'Cancelled.'
                 sys.exit(1)
-            
-        for loc in loclst: 
+
+        for loc in loclst:
             print 'Deleting %s...' % loc.location
             loc.delete()
-    
+
     def filter(self, *kargs, **kwargs):
         if len(kargs) > 1:
             raise SyntaxError()
-        
-        if len(kargs) > 0: 
+
+        if len(kargs) > 0:
             locname = kargs[0]
-            loclst = Location.query.filter_by(location = locname)
+            loclst = Location.query.filter_by(location=locname)
         else:
             loclst = Location.query.filter(None)
 
@@ -75,43 +76,42 @@ class LocationController(Controller):
         print self.filter(*kargs, **kwargs)
 
     set.usage = {
-        'shortdesc': 'Manage location',        
-        'usage': [ '%(exec)s location set <location>' ],
-        'options': {             
-            'help': 'displays the current help',        
+        'shortdesc': 'Manage location',
+        'usage': ['%(exec)s location set <location>'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
-    
-    remove.usage = {        
-        'shortdesc': 'Manage location',        
-        'usage': [ '%(exec)s location remove <location>' ],
-        'options': {             
-            'help': 'displays the current help',        
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
+
+    remove.usage = {
+        'shortdesc': 'Manage location',
+        'usage': ['%(exec)s location remove <location>'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
-    
-    list.usage = {        
-        'shortdesc': 'Manage location',        
-        'usage': [ '%(exec)s location list [<location>]' ],
-        'options': {             
-            'help': 'displays the current help',        
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
+
+    list.usage = {
+        'shortdesc': 'Manage location',
+        'usage': ['%(exec)s location list [<location>]'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
-    
-    usage = {         
-        'command': [ 'location', 'loc' ],        
-        'shortdesc': 'Manage location',    
-    } 
-    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
+
+    usage = {
+        'command': ['location', 'loc'],
+        'shortdesc': 'Manage location',
+    }
+
 LocationController()
 
 if __name__ == '__main__':
     c = LocationController()
     c.list()
-

@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License
 # along with ssh-keydb.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 from model import *
 from skeletool.controller import Controller
 from key import KeyController
@@ -25,7 +24,8 @@ from membership import MembershipController
 from group import ServerGroupController
 from permission import PermissionController
 
-__all__ = [ 'ProfileController' ]
+__all__ = ['ProfileController']
+
 
 class ProfileController(Controller):
     def show(self, *kargs, **kwargs):
@@ -36,7 +36,7 @@ class ProfileController(Controller):
 
         userlist = chars['userlist']
 
-        if len(userlist) == 0: 
+        if len(userlist) == 0:
             return
 
         for user in userlist:
@@ -56,7 +56,7 @@ class ProfileController(Controller):
         userlist = self.filter(*kargs, **kwargs)
         res['userlist'] = userlist
 
-        if len(res['userlist']) == 0: 
+        if len(res['userlist']) == 0:
             return
 
         res['users'] = {}
@@ -73,12 +73,12 @@ class ProfileController(Controller):
             res['users'][user]['permissions'] = self.buildperms(*kargs, **kwargs)
 
         return res
-            
+
     def buildgroupnames(self, *kargs, **kwargs):
         self._groupmap = {}
 
         for group in self._sglist:
-            self._groupmap[group.server_group] = [ server.server for server in group.servers ]
+            self._groupmap[group.server_group] = [server.server for server in group.servers]
 
         return self._groupmap
 
@@ -89,7 +89,7 @@ class ProfileController(Controller):
 
         for memb in memblist:
             sgname = memb.server_group.server_group
-            sg = sgctrl.filter(group = sgname)[0]
+            sg = sgctrl.filter(group=sgname)[0]
             if sg not in self._sglist:
                 self._sglist.append(sg)
 
@@ -102,11 +102,11 @@ class ProfileController(Controller):
         gperms = []
 
         for memb in memblist:
-            permlist = Permission.query.filter_by(location = user.location, role = memb.role)
+            permlist = Permission.query.filter_by(location=user.location, role=memb.role)
             for perm in permlist:
                 if perm not in gperms and perm.server.server in self._groupmap[memb.server_group.server_group]:
                     gperms.append(perm)
-        
+
         return gperms
 
     def buildmemb(self, *kargs, **kwargs):
@@ -114,7 +114,6 @@ class ProfileController(Controller):
         memblist = membctrl.filter(*kargs, **kwargs)
         self._memblist = memblist
         return memblist
-
 
     def buildkeys(self, *kargs, **kwargs):
         keyctrl = KeyController()
@@ -126,14 +125,14 @@ class ProfileController(Controller):
         sglist = kargs[0]['groupnames']
 
         for sgname in sglist:
-            srvs = [ '    ' + x for x in sglist[sgname] ]
+            srvs = ['    ' + x for x in sglist[sgname]]
             print '  ' + sgname + ': '
             print '\n'.join(srvs)
 
     def showperms(self, *kargs, **kwargs):
         print '\nPermissions:'
         gperms = kargs[0]['permissions']
-        
+
         l1 = 0
         l2 = 0
         l3 = 0
@@ -203,31 +202,30 @@ class ProfileController(Controller):
 
         userlist = User.query.filter(None)
 
-        if 'user' in opts: 
-            userlist = userlist.filter_by(user = opts['user'])
+        if 'user' in opts:
+            userlist = userlist.filter_by(user=opts['user'])
 
         return userlist.all()
 
-    show.usage = {        
-        'shortdesc': 'Build reports',        
-        'usage': [ '%(exec)s profile show [--user=<user>]' ],
-        'options': {             
-            'help': 'displays the current help',        
+    show.usage = {
+        'shortdesc': 'Build reports',
+        'usage': ['%(exec)s profile show [--user=<user>]'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'user=': 'filter by user',
             'long': 'long display',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', 'long': 'l' }    
-    }    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', 'long': 'l'}
+    }
 
-    usage = {         
-        'command': [ 'profile' ],
-        'shortdesc': 'Show profile',    
-    } 
+    usage = {
+        'command': ['profile'],
+        'shortdesc': 'Show profile',
+    }
 
 ProfileController()
 
 if __name__ == '__main__':
     c = ProfileController()
     c.build()
-

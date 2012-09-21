@@ -20,6 +20,7 @@
 from elixir import *
 import os.path
 
+
 def dbinit(**opts):
     DATABASEPATH = opts.get('dbpath', os.path.expanduser('~/.ssh-keydb.db'))
     if os.path.isdir(DATABASEPATH):
@@ -30,10 +31,11 @@ def dbinit(**opts):
     #metadata.bind.echo = True
     setup_all(True)
 
+
 class Location(Entity):
     using_options(tablename='location')
 
-    location = Field(Text, primary_key = True)
+    location = Field(Text, primary_key=True)
     users = OneToMany('User')
     permissions = OneToMany('Permission')
 
@@ -43,10 +45,11 @@ class Location(Entity):
     def __str__(self):
         return self.location
 
+
 class User(Entity):
     using_options(tablename='user')
 
-    user = Field(Text, primary_key = True)
+    user = Field(Text, primary_key=True)
     location = ManyToOne('Location')
     keys = OneToMany('Key')
     memberships = OneToMany('Membership')
@@ -61,10 +64,11 @@ class User(Entity):
     def __str__(self):
         return self.user
 
+
 class Key(Entity):
     using_options(tablename='key')
 
-    key_name = Field(Text, primary_key = True)
+    key_name = Field(Text, primary_key=True)
     user = ManyToOne('User', column_kwargs={'primary_key': True})
     key_type = ManyToOne('KeyType')
     key_value = Field(Text)
@@ -73,19 +77,20 @@ class Key(Entity):
     def __repr__(self):
         s = "<key>"
         s += '<name>%s</name>' % self.key_name
-        if self.key_type is not None: 
+        if self.key_type is not None:
             s += repr(self.key_type)
-        if self.key_value is not None: 
+        if self.key_value is not None:
             s += '<public>%s</public>' % self.key_value
         return s + "</key>"
 
     def __str__(self):
         return self.key_name
 
+
 class KeyType(Entity):
     using_options(tablename='keytype')
 
-    key_type = Field(Text, primary_key = True)
+    key_type = Field(Text, primary_key=True)
     keys = OneToMany('Key')
 
     def __repr__(self):
@@ -94,10 +99,11 @@ class KeyType(Entity):
     def __str__(self):
         return self.key_type
 
+
 class Server(Entity):
     using_options(tablename='server')
 
-    server = Field(Text, primary_key = True)
+    server = Field(Text, primary_key=True)
     fqdn = Field(Text)
     server_group = ManyToOne('ServerGroup')
     permissions = OneToMany('Permission')
@@ -106,7 +112,7 @@ class Server(Entity):
     def __repr__(self):
         if len(self.hostkeys) > 0:
             s = "<server name='%s'>" % self.server
-            s += ''.join([ repr(key) for key in self.hostkeys ])
+            s += ''.join([repr(key) for key in self.hostkeys])
             s += "</server>"
         else:
             s = "<server name='%s' />" % self.server
@@ -115,46 +121,49 @@ class Server(Entity):
     def __str__(self):
         return self.server
 
+
 class ServerHostKey(Entity):
     using_options(tablename='serverhostkey')
 
-    filename = Field(Text, primary_key = True)
+    filename = Field(Text, primary_key=True)
     server = ManyToOne('Server', column_kwargs={'primary_key': True})
     private_key = Field(Text)
     public_key = Field(Text)
 
     def __repr__(self):
         s = "<key name='%s'>" % self.filename
-        if self.private_key is not None: 
+        if self.private_key is not None:
             s += '<private>%s</private>' % self.private_key
-        if self.public_key is not None: 
+        if self.public_key is not None:
             s += '<public>%s</public>' % self.public_key
         return s + "</key>"
 
     def __str__(self):
         return self.filename
 
+
 class ServerGroup(Entity):
     using_options(tablename='servergroup')
 
-    server_group = Field(Text, primary_key = True)
+    server_group = Field(Text, primary_key=True)
     servers = OneToMany('Server')
     memberships = OneToMany('Membership')
 
     def __repr__(self):
         if len(self.servers) > 0:
             s = "<servergroup name='%s'>" % self.server_group
-            s += ''.join([ repr(server) for server in self.servers ])
+            s += ''.join([repr(server) for server in self.servers])
             s += "</servergroup>"
         return s
 
     def __str__(self):
         return self.server_group
 
+
 class Role(Entity):
     using_options(tablename='role')
 
-    role = Field(Text, primary_key = True)
+    role = Field(Text, primary_key=True)
     memberships = OneToMany('Membership')
     permissions = OneToMany('Permission')
 
@@ -163,6 +172,7 @@ class Role(Entity):
 
     def __str__(self):
         return self.role
+
 
 class Membership(Entity):
     using_options(tablename='membership')
@@ -180,13 +190,14 @@ class Membership(Entity):
         s += "</membership>"
         return s
 
+
 class Permission(Entity):
     using_options(tablename='permission')
 
     role = ManyToOne('Role', column_kwargs={'primary_key': True})
     server = ManyToOne('Server', column_kwargs={'primary_key': True})
     location = ManyToOne('Location', column_kwargs={'primary_key': True})
-    login = Field(Text, primary_key = True)
+    login = Field(Text, primary_key=True)
     command = Field(Text)
 
     def __repr__(self):
@@ -196,4 +207,3 @@ class Permission(Entity):
         s += '<command>%s</command>' % self.command
         s += "</permission>"
         return s
-

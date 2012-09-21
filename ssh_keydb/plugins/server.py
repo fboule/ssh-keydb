@@ -23,7 +23,8 @@ from model import *
 from skeletool.controller import Controller
 from group import *
 
-__all__ = [ 'ServerController' ]
+__all__ = ['ServerController']
+
 
 class ServerController(Controller):
     def filter(self, *args, **opts):
@@ -32,8 +33,8 @@ class ServerController(Controller):
 
         serverlist = Server.query.filter(None)
 
-        if 'server' in opts: 
-            serverlist = Server.query.filter_by(server = opts['server'])
+        if 'server' in opts:
+            serverlist = Server.query.filter_by(server=opts['server'])
 
         return serverlist.all()
 
@@ -54,7 +55,7 @@ class ServerController(Controller):
         keytype = args[2]
         keystring = args[3]
 
-        srv = Server.get_by(server = srvname)
+        srv = Server.get_by(server=srvname)
 
         if srv is None:
             return False
@@ -65,7 +66,7 @@ class ServerController(Controller):
                 srvhostkey = hostkey
 
         if srvhostkey is None:
-            srvhostkey = ServerHostKey(filename = filename, server = srv)
+            srvhostkey = ServerHostKey(filename=filename, server=srv)
 
         if keytype == 'pubkey':
             srvhostkey.public_key = keystring
@@ -76,7 +77,6 @@ class ServerController(Controller):
         session.commit()
 
         return True
-            
 
     def set(self, *args, **opts):
         if len(args) < 1:
@@ -86,20 +86,23 @@ class ServerController(Controller):
         fqdn = None
         grp = None
 
-        if len(args) > 1: fqdn = args[1]
-        if len(args) > 2: 
+        if len(args) > 1:
+            fqdn = args[1]
+        if len(args) > 2:
             grpname = args[2]
-            grp = ServerGroupController().filter(group = grpname)[0]
+            grp = ServerGroupController().filter(group=grpname)[0]
 
         srvlst = self.filter()
 
         for srv in srvlst:
             if srv.server == srvname:
-                if fqdn is not None: srv.fqdn = fqdn
-                if grp is not None: srv.server_group = grp
+                if fqdn is not None:
+                    srv.fqdn = fqdn
+                if grp is not None:
+                    srv.server_group = grp
                 return True
 
-        srv = Server(server = srvname, fqdn = fqdn, server_group = grp)
+        srv = Server(server=srvname, fqdn=fqdn, server_group=grp)
         session.flush()
         session.commit()
 
@@ -124,56 +127,55 @@ class ServerController(Controller):
         session.commit()
 
     set.usage = {
-        'shortdesc': 'Manage servers',        
-        'usage': [ '%(exec)s server set <server> [<fqdn> [<servergroup>] ]' ],
-        'options': {             
+        'shortdesc': 'Manage servers',
+        'usage': ['%(exec)s server set <server> [<fqdn> [<servergroup>] ]'],
+        'options': {
             'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
 
     key.usage = {
-        'shortdesc': 'Manage server keys',        
-        'usage': [ 
+        'shortdesc': 'Manage server keys',
+        'usage': [
             '%(exec)s server key <server> <filename> privkey <keystring>',
             '%(exec)s server key <server> <filename> pubkey <keystring>',
         ],
-        'options': {             
+        'options': {
             'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
-    
-    
-    remove.usage = {        
-        'shortdesc': 'Manage servers',        
-        'usage': [ '%(exec)s server remove [--server=<server>]' ],
-        'options': {             
-            'help': 'displays the current help',        
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
+
+    remove.usage = {
+        'shortdesc': 'Manage servers',
+        'usage': ['%(exec)s server remove [--server=<server>]'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'server=': 'filter by server name',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
-    
-    list.usage = {        
-        'shortdesc': 'Manage servers',        
-        'usage': [ '%(exec)s server list [--server=<server>]' ],
-        'options': {             
-            'help': 'displays the current help',        
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
+
+    list.usage = {
+        'shortdesc': 'Manage servers',
+        'usage': ['%(exec)s server list [--server=<server>]'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'server=': 'filter by server name',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
-    
-    usage = {         
-        'command': [ 'server' ],        
-        'shortdesc': 'Manage servers',    
-    } 
-    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
+
+    usage = {
+        'command': ['server'],
+        'shortdesc': 'Manage servers',
+    }
+
 ServerController()
 
 if __name__ == '__main__':

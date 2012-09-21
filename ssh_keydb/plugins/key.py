@@ -21,7 +21,8 @@ import sys
 from model import *
 from skeletool.controller import Controller
 
-__all__ = [ 'KeyController' ]
+__all__ = ['KeyController']
+
 
 class KeyController(Controller):
     def list(self, *kargs, **kwargs):
@@ -31,16 +32,16 @@ class KeyController(Controller):
 
         lst = self.filter(*kargs, **kwargs)
 
-        if len(lst) == 0: 
+        if len(lst) == 0:
             return
 
-        hdr = { 'key_id': 'key_id', 'key': 'key' }
+        hdr = {'key_id': 'key_id', 'key': 'key'}
 
         nl = {}
         for key in lst:
             nl['key_id'] = max(nl.get('key_id', len(hdr['key_id'])), len(key.key_name))
             nl['key'] = max(nl.get('key', len(hdr['key'])), lenvalue + 3)
-            
+
         fmt = '%%(key_id)-%(key_id)is %%(key)-%(key)is' % nl
         n = sum(nl.values()) + 1
 
@@ -48,7 +49,7 @@ class KeyController(Controller):
         print '-' * n
 
         for key in lst:
-            print fmt % { 'key_id': key.key_name, 'key': '...' + key.key_value[-lenvalue:] }
+            print fmt % {'key_id': key.key_name, 'key': '...' + key.key_value[-lenvalue:]}
 
     def filter(self, *kargs, **kwargs):
         if len(kargs) > 0:
@@ -57,18 +58,20 @@ class KeyController(Controller):
         opts = kwargs
         keylist = Key.query.filter(None)
 
-        if 'key' in opts: 
-            keylist = keylist.filter_by(key_name = opts['key'])
+        if 'key' in opts:
+            keylist = keylist.filter_by(key_name=opts['key'])
 
-        if 'type' in opts: 
-            keytype = KeyType.get_by(key_type = opts['type'])
-            if keytype is None: return None
-            keylist = keylist.filter_by(key_type = keytype)
+        if 'type' in opts:
+            keytype = KeyType.get_by(key_type=opts['type'])
+            if keytype is None:
+                return None
+            keylist = keylist.filter_by(key_type=keytype)
 
-        if 'user' in opts: 
-            user = User.get_by(user = opts['user'])
-            if user is None: return None
-            keylist = keylist.filter_by(user = user)
+        if 'user' in opts:
+            user = User.get_by(user=opts['user'])
+            if user is None:
+                return None
+            keylist = keylist.filter_by(user=user)
 
         return keylist.all()
 
@@ -85,12 +88,15 @@ class KeyController(Controller):
         if cmd not in ('keystring', 'keyfile'):
             return False
 
-        user = User.get_by(user = username)
+        user = User.get_by(user=username)
 
-        if user is None: return False
+        if user is None:
+            return False
 
-        if cmd == 'keyfile': self.setkeyfile(user, cmdarg)
-        if cmd == 'keystring': self.setkeystring(user, cmdarg)
+        if cmd == 'keyfile':
+            self.setkeyfile(user, cmdarg)
+        if cmd == 'keystring':
+            self.setkeystring(user, cmdarg)
 
         session.flush()
         session.commit()
@@ -102,23 +108,23 @@ class KeyController(Controller):
 
         keyname = items[2]
         ii = 0
-        key = Key.get_by(key_name = keyname, user = user)
+        key = Key.get_by(key_name=keyname, user=user)
 
         while key is not None:
             keyname = items[2] + '.' + str(ii)
-            key = Key.get_by(key_name = keyname, user = user)
+            key = Key.get_by(key_name=keyname, user=user)
             ii = ii + 1
-        
-        keytype = KeyType.get_by(key_type = items[0])
-        
-        if keytype is None: 
-            keytype = KeyType(key_type = items[0])
-        
-        key = Key(key_name = keyname, key_value = ' '.join(items[0:2]), key_type = keytype, user = user)
+
+        keytype = KeyType.get_by(key_type=items[0])
+
+        if keytype is None:
+            keytype = KeyType(key_type=items[0])
+
+        key = Key(key_name=keyname, key_value=' '.join(items[0:2]), key_type=keytype, user=user)
 
         session.flush()
         session.commit()
-        
+
         return True
 
     def setkeyfile(self, user, keyfile):
@@ -141,47 +147,47 @@ class KeyController(Controller):
         session.flush()
         session.commit()
 
-    list.usage = {        
-        'shortdesc': 'Manage keys',        
-        'usage': [ '%(exec)s key list [--user=<user>] [--key=<key>] [--type=<type>]' ],
-        'options': {             
-            'help': 'displays the current help',        
+    list.usage = {
+        'shortdesc': 'Manage keys',
+        'usage': ['%(exec)s key list [--user=<user>] [--key=<key>] [--type=<type>]'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'user=': 'filter by user',
             'key=': 'filter by key',
             'type=': 'filter by type',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
 
-    set.usage = {        
-        'shortdesc': 'Manage keys',        
-        'usage': [ 
+    set.usage = {
+        'shortdesc': 'Manage keys',
+        'usage': [
             '%(exec)s key set <user> keystring "<string>"',
-            '%(exec)s key set <user> keyfile <keyfile>' ],
-        'options': {             
-            'help': 'displays the current help',        
+            '%(exec)s key set <user> keyfile <keyfile>'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
 
-    remove.usage = {        
-        'shortdesc': 'Manage keys',        
-        'usage': [ '%(exec)s key remove [--user=<user>] [--key=<key>]' ],
-        'options': {             
-            'help': 'displays the current help',        
+    remove.usage = {
+        'shortdesc': 'Manage keys',
+        'usage': ['%(exec)s key remove [--user=<user>] [--key=<key>]'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'user=': 'filter by user',
             'key=': 'filter by key',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
 
-    usage = {         
-        'command': [ 'key' ],
-        'shortdesc': 'Manage keys',    
-    } 
+    usage = {
+        'command': ['key'],
+        'shortdesc': 'Manage keys',
+    }
 
 KeyController()
 

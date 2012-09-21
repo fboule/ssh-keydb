@@ -22,7 +22,8 @@ import sys
 from model import *
 from skeletool.controller import Controller
 
-__all__ = [ 'ServerGroupController' ]
+__all__ = ['ServerGroupController']
+
 
 class ServerGroupController(Controller):
     def filter(self, *args, **opts):
@@ -31,13 +32,14 @@ class ServerGroupController(Controller):
 
         grouplist = ServerGroup.query.filter(None)
 
-        if 'group' in opts: 
-            grouplist = grouplist.filter_by(server_group = opts['group'])
+        if 'group' in opts:
+            grouplist = grouplist.filter_by(server_group=opts['group'])
 
-        if 'server' in opts: 
-            srv = Server.get_by(server = opts['server'])
-            if srv is None: return None
-            grouplist = grouplist.filter(ServerGroup.servers.any(server = opts['server']))
+        if 'server' in opts:
+            srv = Server.get_by(server=opts['server'])
+            if srv is None:
+                return None
+            grouplist = grouplist.filter(ServerGroup.servers.any(server=opts['server']))
 
         return grouplist.all()
 
@@ -56,17 +58,18 @@ class ServerGroupController(Controller):
         groupname = args[0]
         srvnames = args[1:]
 
-        grp = ServerGroup.get_by(server_group = groupname)
+        grp = ServerGroup.get_by(server_group=groupname)
 
         if grp is None:
-            grp = ServerGroup(server_group = groupname)
+            grp = ServerGroup(server_group=groupname)
 
         srvlst = grp.servers[:]
 
         for servername in args[1:]:
-            srv = Server.get_by(server = servername)
+            srv = Server.get_by(server=servername)
 
-            if srv is None: srv = Server(server = servername)
+            if srv is None:
+                srv = Server(server=servername)
 
             if srv not in grp.servers:
                 grp.servers.append(srv)
@@ -75,7 +78,7 @@ class ServerGroupController(Controller):
             for srv in srvlst:
                 if srv.server not in srvnames:
                     grp.servers.remove(srv)
-                    permlist = Permission.query.filter_by(server = srv).all()
+                    permlist = Permission.query.filter_by(server=srv).all()
                     if len(permlist) > 0:
                         print 'Server %s has %i permission elements.' % (srv.server, len(permlist))
                         print permlist
@@ -104,45 +107,45 @@ class ServerGroupController(Controller):
         session.commit()
 
     set.usage = {
-        'shortdesc': 'Manage server groups',        
-        'usage': [ '%(exec)s group set [--append] <group> <server1> [<server2>...]' ],
-        'options': {             
+        'shortdesc': 'Manage server groups',
+        'usage': ['%(exec)s group set [--append] <group> <server1> [<server2>...]'],
+        'options': {
             'help': 'displays the current help',
             'dbpath=': 'database path (/.ssh-keydb.db by default)',
             'append': 'append servers to the group',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', 'dbpath': 'd:', }    
-    }    
-    
-    remove.usage = {        
-        'shortdesc': 'Manage server groups',        
-        'usage': [ '%(exec)s group remove [--group=<group>] [--server=<server>]' ],
-        'options': {             
-            'help': 'displays the current help',        
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', 'dbpath': 'd:', }
+    }
+
+    remove.usage = {
+        'shortdesc': 'Manage server groups',
+        'usage': ['%(exec)s group remove [--group=<group>] [--server=<server>]'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (/.ssh-keydb.db by default)',
             'group=': 'filter by server group name',
             'server=': 'filter by server name',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', 'dbpath': 'd:', }    
-    }    
-    
-    list.usage = {        
-        'shortdesc': 'Manage server groups',        
-        'usage': [ '%(exec)s group list [--group=<group>] [--server=<server>]' ],
-        'options': {             
-            'help': 'displays the current help',        
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', 'dbpath': 'd:', }
+    }
+
+    list.usage = {
+        'shortdesc': 'Manage server groups',
+        'usage': ['%(exec)s group list [--group=<group>] [--server=<server>]'],
+        'options': {
+            'help': 'displays the current help',
             'dbpath=': 'database path (/.ssh-keydb.db by default)',
             'group=': 'filter by server group name',
             'server=': 'filter by server name',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
-    
-    usage = {         
-        'command': [ 'group' ],        
-        'shortdesc': 'Manage server groups',    
-    } 
-    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
+
+    usage = {
+        'command': ['group'],
+        'shortdesc': 'Manage server groups',
+    }
+
 ServerGroupController()
 
 if __name__ == '__main__':

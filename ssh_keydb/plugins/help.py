@@ -19,7 +19,8 @@
 
 from skeletool.controller import *
 
-__all__ = [ 'HelpController' ]
+__all__ = ['HelpController']
+
 
 class HelpController(Controller):
     def default(self, *kargs, **kwargs):
@@ -53,12 +54,14 @@ class HelpController(Controller):
                 cmd = cmd + ' ('
                 for alt in cmdlst[1:]:
                     cmd = cmd + alt
-                    if alt != cmdlst[-1]: cmd = cmd + ', '
+                    if alt != cmdlst[-1]:
+                        cmd = cmd + ', '
                 cmd = cmd + ')'
 
             lst[cmd] = shortdesc
-            if len(cmd) > n: n = len(cmd)
-        
+            if len(cmd) > n:
+                n = len(cmd)
+
         for cmd in lst:
             fmt = '%-' + str(n) + 's : %s\n'
             s = s + fmt % (cmd, lst[cmd])
@@ -80,7 +83,8 @@ class HelpController(Controller):
             line = line + ' ('
             for cmd in commandids[1:]:
                 line = line + cmd
-                if cmd != commandids[-1]: line = line + ', '
+                if cmd != commandids[-1]:
+                    line = line + ', '
             line = line + ')'
 
         s = '%s: %s\n\n' % (line, shortdesc)
@@ -88,17 +92,18 @@ class HelpController(Controller):
         n = len(hdr)
 
         for method in controller.actions():
-            if 'usage' not in dir(method): 
+            if 'usage' not in dir(method):
                 continue
             fmt = '%' + str(n) + 's%s\n'
             for usage in method.usage['usage']:
                 line = fmt % (hdr, usage)
-                s = s + line % { 'exec': self.app }
+                s = s + line % {'exec': self.app}
                 hdr = ''
 
-        if longdesc != '': s = s + '\n  ' + longdesc + '\n'
+        if longdesc != '':
+            s = s + '\n  ' + longdesc + '\n'
         s = s + '\nValid options:\n'
-        
+
         options = {}
         n = 0
 
@@ -126,25 +131,24 @@ class HelpController(Controller):
 
     app = 'ssh-keydb'
 
-    usage = {         
-        'command': [ 'help' ],        
-        'shortdesc': 'Help',    
-    } 
-    
-    help.usage = {        
+    usage = {
+        'command': ['help'],
         'shortdesc': 'Help',
-        'usage': [ '%(exec)s help [<options>]' ],
-        'options': {             
-            'intro': 'displays short introduction',        
-            'help': 'displays help on help',        
+    }
+
+    help.usage = {
+        'shortdesc': 'Help',
+        'usage': ['%(exec)s help [<options>]'],
+        'options': {
+            'intro': 'displays short introduction',
+            'help': 'displays help on help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
-        },        
-        'shortopts': { 'help': 'h', 'dbpath': 'd:', }    
-    }    
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
 
 HelpController()
 
 if __name__ == '__main__':
     c = HelpController()
     c.help()
-
