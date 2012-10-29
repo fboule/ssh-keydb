@@ -90,7 +90,13 @@ class ServerController(Controller):
             fqdn = args[1]
         if len(args) > 2:
             grpname = args[2]
-            grp = ServerGroupController().filter(group=grpname)[0]
+            grps = ServerGroupController().filter(group=grpname)
+
+            if len(grps) > 0:
+                grp = grps[0]
+            else:
+                print >>sys.stderr, 'Aborted: Group %s does not exist.' % grpname
+                return True
 
         srvlst = self.filter()
 
