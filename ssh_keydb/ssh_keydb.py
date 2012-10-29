@@ -19,15 +19,15 @@
 # You should have received a copy of the GNU General Public License
 # along with ssh-keydb.  If not, see <http://www.gnu.org/licenses/>.
 
-from skeletool.options import *
 from plugins.model import *
 from plugins import *
 
+from skeletool.options import *
 from skeletool import *
 
 
 def run():
-    MainApp('ssh_keydb').run()
+    MainApp('ssh_keydb', dbinit).run()
 
 if __name__ == '__main__':
     run()
