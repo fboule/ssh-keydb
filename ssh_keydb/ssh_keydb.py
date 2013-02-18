@@ -28,7 +28,7 @@ from skeletool import *
 VERSION='0.2'
 
 def run():
-    MainApp('ssh_keydb', dbinit).run()
+    MainApp('ssh_keydb', VERSION, dbinit).run()
 
 if __name__ == '__main__':
     run()
