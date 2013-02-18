@@ -25,48 +25,6 @@ from skeletool.controller import Controller
 
 __all__ = ['GeneratorController']
 
-
-class OpenSSHGenerator(object):
-    def run(self):
-#        opts = self.__opts
-#
-#        srvlst, role, login = OptsFilter().filter(opts)
-#        scplist = {}
-#
-#        for srv in srvlst:
-#            srvgrp = srv.server_group
-#            if login is not None:
-#                perms = Permission.query.filter_by(login = login, server = srv)
-#            else:
-#                perms = Permission.query.filter_by(role = role, server = srv)
-#            for p in perms:
-#                filename = 'authorized_keys_%s_%s' % (p.login, srv.server)
-#                if os.path.exists(filename): os.remove(filename)
-#                if filename not in scplist: scplist[filename] = (p.login, srv.fqdn)
-#            for p in perms:
-#                f = file('authorized_keys_%s_%s' % (p.login, srv.server), 'a')
-#                membs = p.role.memberships
-#                for m in membs:
-#                    if srvgrp == m.server_group:
-#                        print >>f, ('%s %s %s' % (p.command % eval(m.args), m.key.key_value, m.key.key_name)).strip()
-#            if 'scp' in opts:
-#                for filename, items in scplist.iteritems():
-#                    print 'Transfer of %s on %s@%s' % (filename, items[0], items[1])
-#                    os.system('scp -q %s %s@%s:.ssh/' % (filename, items[0], items[1]))
-#
-        return True
-
-
-class ScpDispatcher(object):
-    def process(self, perm, memb):
-        args = eval((memb.args in (None, '')) and '{}' or memb.args)
-        f = file('authorized_keys_%s_%s' % (perm.login % args, perm.server.server))
-        if perm.command is None:
-            print ('%s %s' % (memb.key.key_value, memb.key.key_name)).strip()
-        else:
-            print ('%s %s %s' % (perm.command % args, memb.key.key_value, memb.key.key_name)).strip()
-
-
 class StdoutDispatcher(object):
     def process(self, perm, memb):
         if perm.command is None:
@@ -170,7 +128,7 @@ class GeneratorController(Controller):
 
     openssh.usage = {
         'shortdesc': 'Generate authorization file',
-        'usage': ['%(exec)s generate openssh [--server=<server>] [--group=<group>] [--role=<role>] [--login=<login>] [--output=<filepath_prefix>]'],
+        'usage': ['%(exec)s generate openssh [--server=<server>] [--group=<group>] [--role=<role>] [--login=<login>] [--output=<pattern>]'],
         'options': {
             'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
@@ -178,8 +136,7 @@ class GeneratorController(Controller):
             'group=': 'filters by server group name',
             'role=': 'filters by role name',
             'login=': 'filters by login name',
-            #'scp': 'transfers authorized_keys files to the appropriate login/server',
-            'output=': 'outputs to file instead of standard output',
+            'output=': 'outputs to file instead of standard output, with %(server)s and %(login)s as placeholders',
         },
         'shortopts': {'help': 'h', 'dbpath': 'd:'}
     }
@@ -199,7 +156,12 @@ class FileOutput(object):
 
     def process(self, perm, memb):
         args = eval((memb.args in (None, '')) and '{}' or memb.args)
-        filename = self._prefix + '_%s_%s' % (perm.login % args, perm.server.server)
+        filename = self._prefix % { 'server': perm.server.server, 'login': perm.login % args }
+        dirname = os.path.dirname(filename)
+
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+
         if filename not in self._filelist:
             self._filelist.append(filename)
             if os.path.exists(filename):
