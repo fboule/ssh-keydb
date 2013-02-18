@@ -25,6 +25,7 @@ from plugins import *
 from skeletool.options import *
 from skeletool import *
 
+VERSION='0.2'
 
 def run():
     MainApp('ssh_keydb', dbinit).run()
