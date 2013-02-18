@@ -5,7 +5,7 @@ setup(
     packages=find_packages(),
 
     # Dependencies
-    install_requires=['SQLAlchemy==0.7.8', 'elixir>=0.7.1', 'pysqlite>=2.5', 'skeletool>=0.2dev'],
+    install_requires=['SQLAlchemy==0.7.8', 'elixir>=0.7.1', 'pysqlite>=2.5', 'skeletool>=0.3dev'],
 
     package_data={
         '': ['COPYING', "*.txt"],
