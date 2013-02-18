@@ -1,11 +1,11 @@
 from setuptools import setup, find_packages
 setup(
     name="ssh-keydb",
-    version="0.1",
+    version="0.2",
     packages=find_packages(),
 
     # Dependencies
-    install_requires=['SQLAlchemy==0.7.8', 'elixir>=0.7.1', 'pysqlite>=2.5', 'skeletool>=0.1dev'],
+    install_requires=['SQLAlchemy==0.7.8', 'elixir>=0.7.1', 'pysqlite>=2.5', 'skeletool>=0.2dev'],
 
     package_data={
         '': ['COPYING', "*.txt"],

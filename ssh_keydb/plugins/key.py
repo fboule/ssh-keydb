@@ -25,6 +25,20 @@ __all__ = ['KeyController']
 
 
 class KeyController(Controller):
+    def get(self, *kargs, **kwargs):
+        args = kargs
+        opts = kwargs
+
+        lst = self.filter(*kargs, **kwargs)
+
+        if len(lst) == 0:
+            return
+
+        hdr = {'key_id': 'key_id', 'key': 'key'}
+
+        for key in lst:
+            print '%(key)s %(key_id)s' % {'key_id': key.key_name, 'key': key.key_value}
+
     def list(self, *kargs, **kwargs):
         args = kargs
         opts = kwargs
@@ -146,6 +160,19 @@ class KeyController(Controller):
 
         session.flush()
         session.commit()
+
+    get.usage = {
+        'shortdesc': 'Manage keys',
+        'usage': ['%(exec)s key get [--user=<user>] [--key=<key>] [--type=<type>]'],
+        'options': {
+            'help': 'displays the current help',
+            'dbpath=': 'database path (~/.ssh-keydb.db by default)',
+            'user=': 'filter by user',
+            'key=': 'filter by key',
+            'type=': 'filter by type',
+        },
+        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+    }
 
     list.usage = {
         'shortdesc': 'Manage keys',
