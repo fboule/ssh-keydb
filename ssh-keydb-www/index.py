@@ -219,7 +219,7 @@ class MainApp(object):
         chars = {}
         chars['updated'] = []
         if 'apply' in form.keys():
-            lst = GeneratorController().openssh(group=form['group'].value, role=form['role'].value, output='keys/new')
+            lst = GeneratorController().openssh(group=form['group'].value, role=form['role'].value, output='keys/%(server)s/%(login)s/authorized_keys')
             chars['updated'] = '<updated>' + ''.join(['<item>%s</item>' % str(item[1]) for item in lst]) + '</updated>'
             if 'push' in form.keys():
                 chars['pushed'] = "<pushed>pushed</pushed>"
