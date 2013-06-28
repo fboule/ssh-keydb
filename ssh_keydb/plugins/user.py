@@ -91,7 +91,7 @@ class UserController(Controller):
         args = kargs
         opts = kwargs
 
-        if len(args) < 2:
+        if len(args) < 1:
             raise SyntaxError()
 
         username = args[0]
