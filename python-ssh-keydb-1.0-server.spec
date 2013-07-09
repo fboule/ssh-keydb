@@ -7,7 +7,7 @@ License:        GPLv3+
 Group:          System Environment/Base
 
 URL:            https://gitorious.org/ssh-keydb
-Source0:        GPL
+Source0:	python-ssh-keydb-%{version}-server.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -31,15 +31,14 @@ define roles and memberships on groups of machines for each individual.
 This package provides the server part of ssh-keydb.
 
 %prep
-%setup -q -c -T
+%setup -n ssh-keydb
 
 %build
 %{__python} setup.py build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -pm 644 %{SOURCE0} .
-install -pm 644 %{SOURCE1} .
+%{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
 
 %post
 # configure apache
