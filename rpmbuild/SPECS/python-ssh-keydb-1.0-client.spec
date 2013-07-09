@@ -1,5 +1,5 @@
 Summary:       Installation package for the client part of ssh-keydb.
-Name:          ssh-keydb-client
+Name:          python-ssh-keydb-client
 Version:       1.0
 Release:       1%{?dist}
 
@@ -18,7 +18,12 @@ Requires(pre): git
 Requires:      redhat-release >=  %{version} 
 
 %description
-Installation package for the client part of ssh-keydb.
+The ssh-keydb project goal is to provide a way to easily manage the
+authorized_keys files containing the OpenSSH public keys used for key-pair
+authentication. Assuming the keys are managed per-user, it is then possible to
+define roles and memberships on groups of machines for each individual. 
+
+This package provides the server part of ssh-keydb.
 
 %prep
 %setup -q -c -T
@@ -77,5 +82,5 @@ rm -rf %{buildroot}
 %doc GPL 
 
 %changelog
-* Thu Jun 20 2013 Fabien Bouleau <fabien.bouleau@ses.com> 1.0
+* Thu Jun 20 2013 Fabien Bouleau <fabien.bouleau@gmail.com> 1.0
 - Initial Package
