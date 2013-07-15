@@ -1,6 +1,6 @@
+%define dirname ssh-keydb
 %define name python-ssh-keydb
 %define version 1.0
-%define unmangled_version 1.0
 %define unmangled_version 1.0
 %define release 1
 
@@ -8,17 +8,16 @@ Summary: OpenSSH public key management tool
 Name: %{name}
 Version: %{version}
 Release: %{release}
-Source0: %{name}-%{unmangled_version}-server.tar.gz
+Source0: %{name}-%{unmangled_version}.tar.gz
 License: GPLv3
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 
-Requires:       redhat-release >=  %{version}
 Requires:       python-elixir >= 0.7.1
-Requires:       python-sqlalchemy == 0.7.8
+Requires:       python-sqlalchemy == 0.7.9
 Requires:       python-pysqlite >= 2.5
-Requires:       python-skeletool >= 0.3
+Requires:       python-skeletool >= 1.0
 Requires:       apache
 Requires:       git
 
@@ -37,7 +36,7 @@ define roles and memberships on groups of machines for each individual.
 This package provides the server part of ssh-keydb.
 
 %prep
-%setup -n %{name}-%{unmangled_version} -n %{name}-%{unmangled_version}
+%setup -n %{dirname}-%{unmangled_version}
 
 %build
 python setup.py build
