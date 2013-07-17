@@ -1,1 +1,4 @@
 include GPL
+include ssh-keydb-www/*
+include ssh-keydb-www/img/*
+include ssh-keydb.conf

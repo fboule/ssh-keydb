@@ -1,5 +1,5 @@
-%define dirname ssh-keydb
 %define name python-ssh-keydb
+%define pyname ssh-keydb
 %define version 1.0
 %define unmangled_version 1.0
 %define release 1
@@ -8,7 +8,7 @@ Summary: OpenSSH public key management tool
 Name: %{name}
 Version: %{version}
 Release: %{release}
-Source0: %{name}-%{unmangled_version}.tar.gz
+Source0: %{pyname}-server-%{unmangled_version}.tar.gz
 License: GPLv3
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -36,17 +36,19 @@ define roles and memberships on groups of machines for each individual.
 This package provides the server part of ssh-keydb.
 
 %prep
-%setup -n %{dirname}-%{unmangled_version}
+%setup -n %{pyname}-server-%{unmangled_version}
 
 %build
 python setup.py build
 
 %install
 python setup.py install --single-version-externally-managed --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+install --directory %{buildroot}/srv/www
+install --directory %{buildroot}/etc/apache2/conf.d
+cp -vr ssh-keydb-www $RPM_BUILD_ROOT/srv/www/
+cp -v ssh-keydb.conf $RPM_BUILD_ROOT/etc/apache2/conf.d/ssh-keydb.conf
 
 %post
-cp -r ssh-keydb-www $RPM_BUILD_ROOT/var/www/
-cp ssh-keydb.conf $RPM_BUILD_ROOT/etc/apache2/mods-enabled/ssh-keydb.conf
 /sbin/service apache2 reload
 
 %clean
@@ -55,6 +57,8 @@ rm -rf $RPM_BUILD_ROOT
 %files -f INSTALLED_FILES
 %defattr(-,root,root)
 %doc GPL 
+/srv/www/*
+/etc/apache2/conf.d/ssh-keydb.conf
 
 %changelog
 * Thu Jul 09 2013 Fabien Bouleau <fabien.bouleau@gmail.com> 1.0

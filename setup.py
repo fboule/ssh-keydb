@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
 setup(
-    name="python-ssh-keydb",
+    name="ssh-keydb-server",
     version="1.0",
     packages=find_packages(),
 
     # Dependencies
-    install_requires=['SQLAlchemy==0.7.8', 'elixir>=0.7.1', 'pysqlite>=2.5', 'skeletool>=1.0'],
+    install_requires=['SQLAlchemy==0.7.9', 'elixir>=0.7.1', 'pysqlite>=2.5', 'skeletool>=1.0'],
 
     package_data={
-        '': ['GPL', 'COPYING', "*.txt"],
+        '': ['GPL', 'COPYING', "*.txt", 'ssh-keydb-www', 'ssh-keydb.conf' ],
     },
 
     entry_points={
