@@ -1,11 +1,11 @@
-%define name python-ssh-keydb
+%define name ssh-keydb
 %define pyname ssh-keydb
 %define version 1.0
 %define unmangled_version 1.0
 %define release 1
 
 Summary: OpenSSH public key management tool
-Name: %{name}
+Name: %{name}-server
 Version: %{version}
 Release: %{release}
 Source0: %{pyname}-server-%{unmangled_version}.tar.gz
