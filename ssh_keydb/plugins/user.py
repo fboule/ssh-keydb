@@ -121,6 +121,9 @@ class UserController(Controller):
         return True
 
     def remove(self, *kargs, **kwargs):
+        args = kargs
+        opts = kwargs
+
         userlist = self.filter(*kargs, **kwargs)
 
         if userlist is None:
@@ -128,7 +131,7 @@ class UserController(Controller):
 
         n = len(userlist)
 
-        if n > 2:
+        if n > 2 and 'yes' not in opts:
             ch = raw_input('Warning: remove all %i users (Y/n)? ' % n)
             if ch != 'Y':
                 print 'Cancelled.'
@@ -138,6 +141,9 @@ class UserController(Controller):
             for key in user.keys:
                 key.delete()
             user.delete()
+
+        if 'yes' in opts:
+            print 'Deleted %i users' % n
 
         session.flush()
         session.commit()
@@ -177,8 +183,9 @@ class UserController(Controller):
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
             'user=': 'filter by user name',
             'key=': 'set/filter by key name',
+            'yes': 'answer \'yes\' to all questions',
         },
-        'shortopts': {'help': 'h', 'dbpath': 'd:', }
+        'shortopts': {'help': 'h', 'dbpath': 'd:', 'yes': 'y' }
     }
 
     usage = {
