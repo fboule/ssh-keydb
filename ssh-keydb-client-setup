@@ -1,0 +1,33 @@
+#!/bin/bash
+
+ROOTDIR=$1
+
+tempname=$( mktemp )
+
+sed "s/^AuthorizedKeysFile/#AuthorizedKeysFile/g" /etc/ssh/sshd_config >$tempname
+cp $ROOTDIR/etc/ssh/sshd_config $ROOTDIR/etc/ssh/sshd_config.old
+cp $tempname $ROOTDIR/etc/ssh/sshd_config
+
+echo "AuthorizedKeysFile /etc/ssh/auth/authorized_keys_%u" >>/etc/ssh/sshd_config
+
+cd $ROOTDIR/home
+
+ls -1 | while read d
+do
+    [ ! -e "$d/.ssh/authorized_keys" ] && continue
+    cp -v "$d/.ssh/authorized_keys" $ROOTDIR/etc/ssh/auth/authorized_keys_$d
+done
+
+cd $ROOTDIR/home/keymgr
+git init --bare keystore.git
+
+cd $ROOTDIR/etc/ssh/auth
+git init
+git remote add origin $ROOTDIR/home/keymgr/keystore.git
+git add .
+git commit -m 'Initial import'
+git push origin master
+git branch --set-upstream master origin/master
+
+rm $tempname
+
