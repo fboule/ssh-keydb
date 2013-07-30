@@ -54,8 +54,12 @@ class LocationController(Controller):
                 sys.exit(1)
 
         for loc in loclst:
-            print 'Deleting %s...' % loc.location
             loc.delete()
+
+        session.flush()
+        session.commit()
+
+        return True
 
     def filter(self, *kargs, **kwargs):
         if len(kargs) > 1:
