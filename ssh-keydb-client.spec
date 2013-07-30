@@ -1,7 +1,7 @@
 %define name ssh-keydb-client
 %define version 1.0
 %define unmangled_version 1.0
-%define release 1
+%define release 2
 
 Summary:       Installation package for the client part of ssh-keydb.
 Name:          %{name}
@@ -68,10 +68,13 @@ touch .gitkeep
 git add .
 git commit -m 'Initial import'
 
-install -pm 755 $MYDIR/post-update $RPM_BUILD_ROOT%{_sysconfdir}/ssh/auth/.git/hooks
-
 git config branch.master.remote origin
 git config branch.master.merge refs/heads/master
+
+[ ! -e $RPM_BUILD_ROOT/usr/local/bin/ssh-keydb-client ] && mkdir -p $RPM_BUILD_ROOT/usr/local/bin/ssh-keydb-client
+install -pm 755 $MYDIR/ak-update $RPM_BUILD_ROOT/usr/local/bin/ssh-keydb-client/
+
+crontab $MYDIR/crontab
 
 %post
 cd /etc/ssh/auth
@@ -92,6 +95,7 @@ rm -rf %{buildroot}
 %config /etc/ssh/auth
 %config /home/keymgr
 %attr(755,keymgr,users) /home/keymgr
+%config /usr/local/bin/ssh-keydb-client
 
 %changelog
 * Thu Jun 20 2013 Fabien Bouleau <fabien.bouleau@ses.com> 1.0
