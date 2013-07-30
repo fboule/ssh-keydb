@@ -90,8 +90,7 @@ class PermissionController(Controller):
         perm = Permission.get_by(role=role, server=srv, login=login, location=location)
 
         if perm is not None:
-            print 'Already exists.'
-            sys.exit(1)
+            return True
 
         Permission(role=role, server=srv, login=login, command=cmd, location=location)
 
