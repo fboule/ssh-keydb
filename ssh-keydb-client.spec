@@ -1,7 +1,11 @@
 Summary:       Installation package for the client part of ssh-keydb.
 Name:          ssh-keydb-client
-Version:       1.0
-Release:       0
+%define version 1.0
+%define unmangled_version 1.0
+%define release 1
+
+Version:       %{version}
+Release:       %{release}
 
 License:       GPLv3+
 Group:         System Environment/Base
@@ -9,7 +13,7 @@ Group:         System Environment/Base
 URL:           http://tbd.com
 Source0:       GPL
 Source1:       ssh-keydb-client-setup
-Source2:       .gitconfig
+Source2:       gitconfig
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -30,7 +34,7 @@ if ! getent passwd keymgr >/dev/null ; then
     useradd -m  -c "ssh-keydb key management account." keymgr
 fi
 mkdir -p $RPM_BUILD_ROOT/home/keymgr/
-install -pm 644 %{SOURCE2} $RPM_BUILD_ROOT/home/keymgr/
+install -pm 644 %{SOURCE2} $RPM_BUILD_ROOT/home/keymgr/.gitconfig
 
 %build
 
