@@ -29,34 +29,39 @@ class DiscoveryController(Controller):
         args = kargs
         opts = kwargs
 
-        if len(args):
-            return None
-
         location = opts.get('location', None)
-        count = 0
+
+        if len(args) or None in (location, ):
+            raise SyntaxError()
+
+        usercount = 0
 
         for line in sys.stdin.readlines():
             items = line.split(' ')
             keyname = items[-1].strip()
             key = ' '.join(items[-3:-1]).strip()
+            command = ' '.join(items[:-3])
 
             keylist = Key.query.filter_by(key_name=keyname)
 
             if len(keylist.all()) == 0:
-                keystring = key + ' ' + keyname
-                count = count + 1
-                if 'verbose' in opts or 'long' in opts:
-                    if 'long' in opts:
-                        print 'Adding %s/%s => ...%s' % (keyname, str(location), key[-20:])
-                    else:
-                        print 'Adding %s' % keyname
-                UserController().set(keyname, location, keystring = keystring)
+                self._adduser(key, keyname, opts)
+                usercount += 1
 
-        print 'Added %i keys/users' % count
+        print 'Added %i keys/users' % usercount
+
+    def _adduser(self, key, keyname, opts):
+        keystring = key + ' ' + keyname
+        if 'verbose' in opts or 'long' in opts:
+            if 'long' in opts:
+                print 'Adding %s/%s => ...%s' % (keyname, str(location), key[-20:])
+            else:
+                print 'Adding %s' % keyname
+        UserController().set(keyname, location, keystring = keystring)
 
     parse.usage = {
         'shortdesc': 'Parse an authorized_keys file for public keys from the standard input',
-        'usage': ['%(exec)s discover parse [--location=<location>]'],
+        'usage': ['%(exec)s discover parse --location=<location>'],
         'options': {
             'help': 'displays the current help',
             'dbpath=': 'database path (~/.ssh-keydb.db by default)',
@@ -64,7 +69,7 @@ class DiscoveryController(Controller):
             'verbose': 'shows what is being added',
             'long': 'shows what is being added with the public keys',
         },
-        'shortopts': {'help': 'h', 'dbpath': 'd:', 'verbose': 'v', 'long': 'l' }
+        'shortopts': {'help': 'h', 'dbpath': 'd:', 'verbose': 'v', 'long': 'l', }
     }
 
     usage = {
