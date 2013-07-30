@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /etc/ssh/auth
+git pull >/dev/null
