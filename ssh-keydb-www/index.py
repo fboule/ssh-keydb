@@ -111,6 +111,7 @@ class MainApp(object):
         chars['errors'] = errors
         chars['all_groups'] = ServerGroupController().filter()
         chars['all_roles'] = RoleController().filter()
+        chars['all_locations'] = LocationController().filter()
         chars['all_keys'] = user.keys
         chars['user'] = repr(user)
         chars['keys'] = user.keys
@@ -126,6 +127,8 @@ class MainApp(object):
             ServerGroupController().set(form['group'].value, *form['servers'].value.split(' '))
         if 'add_role' in formkeys:
             RoleController().set(form['role'].value)
+        if 'add_location' in formkeys:
+            LocationController().set(form['location'].value)
         if 'add_permission' in formkeys:
             role = form['role'].value
             login = form['login'].value
@@ -134,6 +137,9 @@ class MainApp(object):
             command = form.has_key('command') and form['command'].value or ''
             PermissionController().set(role, login, location, server, command)
         for k in formkeys:
+            if k.startswith('del_location'):
+                v = k.split('_')[2:]
+                LocationController().remove(v[0])
             if k.startswith('del_role'):
                 v = k.split('_')[2:]
                 RoleController().remove(role=v[0])

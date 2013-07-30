@@ -49,6 +49,32 @@
     </form>
 </div>
 
+<div id='locations'>
+    <form method='post' action='?page=servers'>
+    <p class='title'> Locations: </p>
+    <table>
+        <tr>
+            <th> Location </th>
+            <th> - </th>
+        </tr>
+        <xsl:for-each select='/page/all_locations/location'>
+        <tr>
+            <td> <xsl:value-of select='.' /> </td>
+            <td>
+                <input type='submit' value='-'> 
+                    <xsl:attribute name='name'>del_location_<xsl:value-of select='.' /></xsl:attribute>
+                </input>
+            </td>
+        </tr>
+        </xsl:for-each>
+        <tr>
+            <td> <input size='40' type='text' name='location'/> </td>
+            <td> <input type='submit' name='add_location' value='+'/> </td>
+        </tr>
+    </table>
+    </form>
+</div>
+
 <div id='roles'>
     <form method='post' action='?page=servers'>
     <p class='title'> Roles: </p>
