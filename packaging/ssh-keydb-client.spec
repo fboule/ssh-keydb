@@ -103,6 +103,7 @@ exit 0
 
 %triggerin -- openssh
 mv /etc/ssh/sshd_config.new /etc/ssh/sshd_config
+/sbin/service sshd reload
 
 %clean
 rm -rf %{buildroot}

@@ -21,7 +21,7 @@
 %define pyname ssh-keydb
 %define version 1.0
 %define unmangled_version 1.0
-%define release 1
+%define release 2
 
 Summary: OpenSSH public key management tool
 Name: %{name}-server
@@ -37,6 +37,7 @@ Requires:       python-elixir >= 0.7.1
 Requires:       python-sqlalchemy == 0.7.9
 Requires:       python-pysqlite >= 2.5
 Requires:       python-skeletool >= 1.0
+Requires:       python-setuptools
 Requires:       apache
 Requires:       git
 
