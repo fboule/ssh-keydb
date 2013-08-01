@@ -21,17 +21,17 @@
 %define pyname ssh-keydb
 %define version 1.0
 %define unmangled_version 1.0
-%define release 2
+%define release 4
 
-Summary: OpenSSH public key management tool
-Name: %{name}-server
-Version: %{version}
-Release: %{release}
-Source0: %{pyname}-server-%{unmangled_version}.tar.gz
-License: GPLv3
-Group: Development/Libraries
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
+Summary:        OpenSSH public key management tool
+Name:           %{name}-server
+Version:        %{version}
+Release:        %{release}
+Source0:        %{pyname}-server-%{unmangled_version}.tar.gz
+License:        GPLv3
+Group:          Development/Libraries
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Prefix:         %{_prefix}
 
 Requires:       python-elixir >= 0.7.1
 Requires:       python-sqlalchemy == 0.7.9
@@ -42,10 +42,10 @@ Requires:       apache
 Requires:       git
 
 BuildRequires:  python-setuptools
-BuildArch: noarch
+BuildArch:      noarch
 
-Vendor: Fabien Bouleau <fabien.bouleau@gmail.com>
-Url: http://code.google.com/p/ssh-keydb/
+Vendor:        Fabien Bouleau <fabien.bouleau@gmail.com>
+Url:           http://code.google.com/p/ssh-keydb/
 
 %description
 The ssh-keydb project goal is to provide a way to easily manage the

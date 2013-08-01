@@ -20,7 +20,7 @@
 %define name ssh-keydb-client
 %define version 1.0
 %define unmangled_version 1.0
-%define release 2
+%define release 4
 
 Summary:       Installation package for the client part of ssh-keydb.
 Name:          %{name}
@@ -30,7 +30,6 @@ Release:       %{release}
 License:       GPLv3+
 Group:         System Environment/Base
 
-Url:           http://code.google.com/p/ssh-keydb/
 Source0:       %{name}-%{unmangled_version}.tar.gz
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -40,7 +39,15 @@ BuildArch:     noarch
 Requires(pre): shadow-utils
 Requires(pre): git
 
+Vendor:        Fabien Bouleau <fabien.bouleau@gmail.com>
+Url:           http://code.google.com/p/ssh-keydb/
+
 %description
+The ssh-keydb project goal is to provide a way to easily manage the
+authorized_keys files containing the OpenSSH public keys used for key-pair
+authentication. Assuming the keys are managed per-user, it is then possible to
+define roles and memberships on groups of machines for each individual. 
+
 Installation package for the client part of ssh-keydb.
 
 %prep
@@ -60,15 +67,20 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ssh/auth
 MYDIR=$PWD
 tempname="$RPM_BUILD_ROOT%{_sysconfdir}/ssh/sshd_config.new"
 
-sed "s/^AuthorizedKeysFile/#AuthorizedKeysFile/g" /etc/ssh/sshd_config >$tempname
-echo "AuthorizedKeysFile /etc/ssh/auth/authorized_keys_%u" >>$tempname
+if ! grep "^AuthorizedKeysFile /etc/ssh/auth/authorized_keys_%u$" /etc/ssh/sshd_config >/dev/null; 
+then
+    sed "s/^AuthorizedKeysFile/#AuthorizedKeysFile/g" /etc/ssh/sshd_config >$tempname
+    echo "AuthorizedKeysFile /etc/ssh/auth/authorized_keys_%u" >>$tempname
+else
+    cp /etc/ssh/sshd_config $tempname
+fi
     
 cd $RPM_BUILD_ROOT/home
 
 ls -1 | while read d
 do
     [ ! -e "$d/.ssh/authorized_keys" ] && continue
-    cp -v "$d/.ssh/authorized_keys" $RPM_BUILD_ROOT/etc/ssh/auth/authorized_keys_$d
+    cp -v "$d/.ssh/authorized_keys" $RPM_BUILD_ROOT%{_sysconfdir}/ssh/auth/authorized_keys_$d
 done
 
 HOMEDIR=$RPM_BUILD_ROOT/home/keymgr
@@ -90,13 +102,22 @@ git commit -m 'Initial import'
 git config branch.master.remote origin
 git config branch.master.merge refs/heads/master
 
-[ ! -e $RPM_BUILD_ROOT/usr/local/bin/ssh-keydb-client ] && mkdir -p $RPM_BUILD_ROOT/usr/local/bin/ssh-keydb-client
-install -pm 755 $MYDIR/ak-update $RPM_BUILD_ROOT/usr/local/bin/ssh-keydb-client/
+[ ! -e $RPM_BUILD_ROOT/usr/local/bin ] && mkdir -p $RPM_BUILD_ROOT/usr/local/bin
+install -pm 755 $MYDIR/ssh-keydb-cron $RPM_BUILD_ROOT/usr/local/bin
+install -pm 755 $MYDIR/ssh-keydb-add-relay $RPM_BUILD_ROOT/usr/local/bin
+install -pm 755 $MYDIR/ssh-keydb-post-update-relay $RPM_BUILD_ROOT/usr/local/bin
 
-crontab $MYDIR/crontab
+if ! crontab -l | grep "/usr/local/bin/ssh-keydb-cron" >/dev/null; 
+then
+    tmpfile=$( mktemp )
+    crontab -l >$tmpfile
+    echo "* * * * *   /usr/local/bin/ssh-keydb-cron" >>$tmpfile
+    crontab $tmpfile
+    rm $tmpfile
+fi
 
 %post
-cd /etc/ssh/auth
+cd %{_sysconfdir}/ssh/auth
 git push origin master
 
 exit 0
@@ -115,8 +136,8 @@ rm -rf %{buildroot}
 %config /etc/ssh/auth
 %config /home/keymgr
 %attr(755,keymgr,users) /home/keymgr
-%config /usr/local/bin/ssh-keydb-client
+%config /usr/local/bin
 
 %changelog
-* Thu Jun 20 2013 Fabien Bouleau <fabien.bouleau@ses.com> 1.0
+* Thu Jul 31 2013 Fabien Bouleau <fabien.bouleau@ses.com> 1.0
 - Initial Package
