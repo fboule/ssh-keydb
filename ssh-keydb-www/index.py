@@ -1,5 +1,24 @@
 #!/usr/bin/env python
 
+# ssh-keydb - http://ssh-keydb.googlecode.com/
+#
+# Copyright (C) 2010 Fabien Bouleau
+#
+# This file is part of ssh-keydb.
+#
+# ssh-keydb is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ssh-keydb is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ssh-keydb.  If not, see <http://www.gnu.org/licenses/>.
+
 import os
 import os.path
 import cgi
@@ -8,7 +27,6 @@ import cgitb
 from subprocess import Popen, PIPE, STDOUT
 
 from ssh_keydb.plugins import *
-
 
 class MainApp(object):
     def run(self):
